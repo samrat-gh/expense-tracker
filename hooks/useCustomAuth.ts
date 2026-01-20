@@ -1,6 +1,6 @@
 "use client";
 
-import { useSignIn, useSignUp, useAuth } from "@clerk/nextjs";
+import { useAuth, useSignIn, useSignUp } from "@clerk/nextjs";
 import { useState } from "react";
 
 export interface AuthState {
@@ -24,7 +24,7 @@ export const useCustomSignIn = () => {
   });
 
   const signInWithOAuth = async (
-    strategy: "oauth_google" | "oauth_github" | "oauth_microsoft"
+    strategy: "oauth_google" | "oauth_github" | "oauth_microsoft",
   ) => {
     if (!isLoaded) return;
 
@@ -72,7 +72,7 @@ export const useCustomSignIn = () => {
       });
 
       const emailCodeStrategy = result.supportedFirstFactors?.find(
-        (strategy) => strategy.strategy === "email_code"
+        (strategy) => strategy.strategy === "email_code",
       );
 
       if (emailCodeStrategy) {
@@ -150,7 +150,7 @@ export const useCustomSignUp = () => {
   });
 
   const signUpWithOAuth = async (
-    strategy: "oauth_google" | "oauth_github" | "oauth_microsoft"
+    strategy: "oauth_google" | "oauth_github" | "oauth_microsoft",
   ) => {
     if (!isLoaded) return;
 

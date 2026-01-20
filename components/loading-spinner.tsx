@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useState, useEffect } from "react";
 
 interface LoadingSpinnerProps {
   size?: "sm" | "md" | "lg";
@@ -26,12 +25,13 @@ export function LoadingSpinner({
     <div
       className={cn(
         "flex flex-col items-center justify-center space-y-3",
-        className
-      )}>
+        className,
+      )}
+    >
       <div
         className={cn(
           "animate-spin rounded-full border-2 border-blue-500 border-t-transparent",
-          sizeClasses[size]
+          sizeClasses[size],
         )}
       />
 
@@ -50,8 +50,9 @@ export function PomodoroLoading({ className }: PomodoroLoadingProps) {
       className={cn(
         "min-h-screen flex items-center justify-center relative",
         "bg-black", // Black background for bars
-        className
-      )}>
+        className,
+      )}
+    >
       {/* Luffy One Piece Short image with black bars */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"

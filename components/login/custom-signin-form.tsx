@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useCustomSignIn } from "@/hooks/useCustomAuth";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { useCustomSignIn } from "@/hooks/useCustomAuth";
 
 interface CustomSignInFormProps {
   onSuccess?: () => void;
@@ -27,7 +27,8 @@ export default function CustomSignInForm({ onSuccess }: CustomSignInFormProps) {
         type="button"
         onClick={handleGoogleSignIn}
         disabled={isLoading}
-        className="w-full h-12 cursor-pointer bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 hover:text-gray-900 flex items-center justify-center gap-3 transition-colors">
+        className="w-full h-12 cursor-pointer bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 hover:text-gray-900 flex items-center justify-center gap-3 transition-colors"
+      >
         <Image
           src="/google-icon.svg"
           width={20}
@@ -42,7 +43,8 @@ export default function CustomSignInForm({ onSuccess }: CustomSignInFormProps) {
         <Link
           href="/terms-conditions"
           target="_blank"
-          className="underline mx-1">
+          className="underline mx-1"
+        >
           Terms of Service
         </Link>
         and

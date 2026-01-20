@@ -1,29 +1,26 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
+import { BarChart3, CheckCircle, Music, User } from "lucide-react";
+import { useState } from "react";
+import { LoadingSpinner } from "@/components/loading-spinner";
+import CustomSignInForm from "@/components/login/custom-signin-form";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-import { Button } from "@/components/ui/button";
-
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger,
   TooltipProvider,
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useState } from "react";
-import { User, CheckCircle, BarChart3, Music } from "lucide-react";
-import { useUser } from "@clerk/nextjs";
 import { useCustomAuth } from "@/hooks/useCustomAuth";
-import CustomSignInForm from "@/components/login/custom-signin-form";
-
-import { LoadingSpinner } from "@/components/loading-spinner";
 
 export default function Login() {
   const [open, setOpen] = useState(false);
@@ -41,7 +38,8 @@ export default function Login() {
         variant="ghost"
         size="icon"
         className="relative rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white/80"
-        disabled>
+        disabled
+      >
         <LoadingSpinner size="sm" text="" />
       </Button>
     );
@@ -64,7 +62,8 @@ export default function Login() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative rounded-full cursor-pointer bg-black/30 backdrop-blur-xl border border-white/10 text-white/90 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300 overflow-hidden group">
+                className="relative rounded-full cursor-pointer bg-black/30 backdrop-blur-xl border border-white/10 text-white/90 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300 overflow-hidden group"
+              >
                 <div className="absolute inset-0 bg-black/40 to-pink-500/0 group-hover:from-blue-500/10 transition-all duration-500" />
                 <User
                   size={20}
@@ -141,7 +140,8 @@ function FeatureItem({
   return (
     <div className="flex items-center gap-3 text-white/90 p-3 rounded-lg bg-white/5 backdrop-blur-sm border border-white/5 hover:bg-white/10 transition-all duration-300 group">
       <div
-        className={`w-8 h-8 rounded-full bg-${color}-500/20 flex items-center justify-center group-hover:bg-${color}-500/30 transition-colors`}>
+        className={`w-8 h-8 rounded-full bg-${color}-500/20 flex items-center justify-center group-hover:bg-${color}-500/30 transition-colors`}
+      >
         <Icon className={`text-${color}-400`} size={16} />
       </div>
       <div>

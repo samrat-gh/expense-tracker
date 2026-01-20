@@ -1,8 +1,8 @@
 "use client";
 
 import { AuthenticateWithRedirectCallback } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function SSOCallback() {
   const [isLoading, setIsLoading] = useState(true);
