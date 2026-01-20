@@ -35,7 +35,7 @@ export function LoadingSpinner({
         )}
       />
 
-      {showText && <p className="text-white text-sm font-medium">{text}</p>}
+      {showText && <p className="font-medium text-sm text-white">{text}</p>}
     </div>
   );
 }
@@ -48,14 +48,14 @@ export function PomodoroLoading({ className }: PomodoroLoadingProps) {
   return (
     <div
       className={cn(
-        "min-h-screen flex items-center justify-center relative",
+        "relative flex min-h-screen items-center justify-center",
         "bg-black", // Black background for bars
         className,
       )}
     >
       {/* Luffy One Piece Short image with black bars */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-center bg-cover bg-no-repeat"
         style={{
           backgroundImage:
             "url('https://vfid4uy2hm.ufs.sh/f/wYVOwdDPjrQvLbUPMuQ12oOYTlbZpPLegCv43I9u6xjhUJiK')",

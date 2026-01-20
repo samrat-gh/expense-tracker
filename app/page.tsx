@@ -94,18 +94,18 @@ export default function Home() {
           >
             <Link
               href="/dashboard"
-              className="group hover:-translate-y-0.5 h-13 rounded-xl px-8 font-semibold text-base shadow-primary/25 shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-primary/30"
+              className="group hover:-translate-y-0.5 rounded-xl px-8 py-3 font-semibold text-base shadow-primary/25 shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-primary/30 dark:bg-purple-50 dark:text-black dark:hover:bg-white dark:hover:text-purple-900"
             >
-              Start Tracking Free
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              Start Tracking
+              <ArrowRight className="ml-2 inline h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
-            <Button
+            {/* <Button
               size="lg"
               variant="outline"
               className="h-13 rounded-xl px-8 font-semibold text-base transition-all duration-300 hover:bg-muted/50"
             >
               Watch Demo
-            </Button>
+            </Button> */}
           </div>
 
           {/* Hero Image */}

@@ -39,21 +39,21 @@ export default function SSOCallback() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="text-center p-8 bg-white rounded-lg shadow-md">
-          <p className="text-red-500 mb-4">{error}</p>
-          <p className="text-sm text-gray-600">Redirecting to home page...</p>
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="rounded-lg bg-white p-8 text-center shadow-md">
+          <p className="mb-4 text-red-500">{error}</p>
+          <p className="text-gray-600 text-sm">Redirecting to home page...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="text-center p-8 bg-white rounded-lg shadow-md">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <p className="text-gray-700 mb-2">Completing authentication...</p>
-        <p className="text-sm text-gray-500">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50">
+      <div className="rounded-lg bg-white p-8 text-center shadow-md">
+        <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-blue-600 border-b-2"></div>
+        <p className="mb-2 text-gray-700">Completing authentication...</p>
+        <p className="text-gray-500 text-sm">
           Please wait while we sign you in.
         </p>
 

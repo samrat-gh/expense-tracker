@@ -27,7 +27,7 @@ export default function CustomSignInForm({ onSuccess }: CustomSignInFormProps) {
         type="button"
         onClick={handleGoogleSignIn}
         disabled={isLoading}
-        className="w-full h-12 cursor-pointer bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 hover:text-gray-900 flex items-center justify-center gap-3 transition-colors"
+        className="flex h-12 w-full cursor-pointer items-center justify-center gap-3 border border-gray-300 bg-white text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
       >
         <Image
           src="/google-icon.svg"
@@ -38,17 +38,17 @@ export default function CustomSignInForm({ onSuccess }: CustomSignInFormProps) {
         {isLoading ? "Signing in..." : "Continue with Google"}
       </Button>
 
-      <p className="text-xs text-white/60 text-center">
+      <p className="text-center text-white/60 text-xs">
         By signing in, you agree to our
         <Link
           href="/terms-conditions"
           target="_blank"
-          className="underline mx-1"
+          className="mx-1 underline"
         >
           Terms of Service
         </Link>
         and
-        <Link href="/privacy-policy" target="_blank" className="underline mx-1">
+        <Link href="/privacy-policy" target="_blank" className="mx-1 underline">
           Privacy Policy
         </Link>
       </p>

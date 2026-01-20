@@ -37,7 +37,7 @@ export default function Login() {
       <Button
         variant="ghost"
         size="icon"
-        className="relative rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white/80"
+        className="relative rounded-full border border-white/20 bg-black/40 text-white/80 backdrop-blur-md"
         disabled
       >
         <LoadingSpinner size="sm" text="" />
@@ -62,12 +62,12 @@ export default function Login() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative rounded-full cursor-pointer bg-black/30 backdrop-blur-xl border border-white/10 text-white/90 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300 overflow-hidden group"
+                className="group relative cursor-pointer overflow-hidden rounded-full border border-white/10 bg-black/30 text-white/90 backdrop-blur-xl transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:text-white"
               >
-                <div className="absolute inset-0 bg-black/40 to-pink-500/0 group-hover:from-blue-500/10 transition-all duration-500" />
+                <div className="absolute inset-0 bg-black/40 to-pink-500/0 transition-all duration-500 group-hover:from-blue-500/10" />
                 <User
                   size={20}
-                  className="relative z-10 transition-transform group-hover:scale-110 duration-300"
+                  className="relative z-10 transition-transform duration-300 group-hover:scale-110"
                 />
               </Button>
             </DialogTrigger>
@@ -79,14 +79,14 @@ export default function Login() {
         </Tooltip>
 
         {/* The actual Dialog content */}
-        <DialogContent className="sm:max-w-md border border-white/20 bg-black/40 backdrop-blur-md shadow-xl text-white">
+        <DialogContent className="border border-white/20 bg-black/40 text-white shadow-xl backdrop-blur-md sm:max-w-md">
           <div className="absolute inset-0 animate-gradient-shift" />
           <div className="relative z-10">
-            <DialogHeader className="space-y-3 text-center pb-2">
-              <DialogTitle className="text-2xl font-semibold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+            <DialogHeader className="space-y-3 pb-2 text-center">
+              <DialogTitle className="bg-gradient-to-r from-white to-white/80 bg-clip-text font-semibold text-2xl text-transparent">
                 Login to PomoFocus
               </DialogTitle>
-              <DialogDescription className="text-white/60 text-sm leading-relaxed">
+              <DialogDescription className="text-sm text-white/60 leading-relaxed">
                 Unlock your productivity potential with personalized features
               </DialogDescription>
             </DialogHeader>
@@ -138,15 +138,15 @@ function FeatureItem({
   desc: string;
 }) {
   return (
-    <div className="flex items-center gap-3 text-white/90 p-3 rounded-lg bg-white/5 backdrop-blur-sm border border-white/5 hover:bg-white/10 transition-all duration-300 group">
+    <div className="group flex items-center gap-3 rounded-lg border border-white/5 bg-white/5 p-3 text-white/90 backdrop-blur-sm transition-all duration-300 hover:bg-white/10">
       <div
-        className={`w-8 h-8 rounded-full bg-${color}-500/20 flex items-center justify-center group-hover:bg-${color}-500/30 transition-colors`}
+        className={`h-8 w-8 rounded-full bg-${color}-500/20 flex items-center justify-center group-hover:bg-${color}-500/30 transition-colors`}
       >
         <Icon className={`text-${color}-400`} size={16} />
       </div>
       <div>
-        <span className="text-sm font-medium">{title}</span>
-        <p className="text-xs text-white/50">{desc}</p>
+        <span className="font-medium text-sm">{title}</span>
+        <p className="text-white/50 text-xs">{desc}</p>
       </div>
     </div>
   );
