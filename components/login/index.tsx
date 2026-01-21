@@ -47,28 +47,29 @@ export default function Login() {
 
   // User menu when logged in
   if (isSignedIn) {
-    // Show user profile button or menu
-    return <User />;
+    return (
+      <Button
+        variant="ghost"
+        size="icon"
+        className="group relative cursor-pointer overflow-hidden rounded-full border border-white/10 bg-black/30 text-white/90 backdrop-blur-xl transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:text-white"
+      >
+        <div className="absolute inset-0 bg-black/40 to-pink-500/0 transition-all duration-500 group-hover:from-blue-500/10" />
+        <User
+          size={20}
+          className="relative z-10 transition-transform duration-300 group-hover:scale-110"
+        />
+      </Button>
+    );
   }
 
-  // Login button + tooltip + dialog
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <TooltipProvider>
         <Tooltip delayDuration={700}>
-          {/* Tooltip wraps ONLY the trigger button */}
           <TooltipTrigger asChild>
             <DialogTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="group relative cursor-pointer overflow-hidden rounded-full border border-white/10 bg-black/30 text-white/90 backdrop-blur-xl transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:text-white"
-              >
-                <div className="absolute inset-0 bg-black/40 to-pink-500/0 transition-all duration-500 group-hover:from-blue-500/10" />
-                <User
-                  size={20}
-                  className="relative z-10 transition-transform duration-300 group-hover:scale-110"
-                />
+              <Button className="hidden shadow-lg shadow-primary/25 transition-all duration-300 hover:shadow-primary/30 hover:shadow-xl sm:inline-flex">
+                Get Started
               </Button>
             </DialogTrigger>
           </TooltipTrigger>
@@ -78,7 +79,6 @@ export default function Login() {
           </TooltipContent>
         </Tooltip>
 
-        {/* The actual Dialog content */}
         <DialogContent className="border border-white/20 bg-black/40 text-white shadow-xl backdrop-blur-md sm:max-w-md">
           <div className="absolute inset-0 animate-gradient-shift" />
           <div className="relative z-10">

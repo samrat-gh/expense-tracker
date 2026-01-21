@@ -14,8 +14,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Login from "@/components/login";
 import { ModeToggle } from "@/components/theme-menu";
-import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
@@ -38,9 +38,7 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-4">
             <ModeToggle />
-            <Button className="hidden shadow-lg shadow-primary/25 transition-all duration-300 hover:shadow-primary/30 hover:shadow-xl sm:inline-flex">
-              Get Started
-            </Button>
+            <Login />
           </div>
         </div>
       </nav>
@@ -549,13 +547,14 @@ export default function Home() {
             Join 50,000+ freelancers and creators who've stopped guessing and
             started knowing exactly where their money goes.
           </p>
-          <Button
+          <Login />
+          {/* <Button
             size="lg"
             className="group hover:-translate-y-0.5 h-14 rounded-xl px-10 font-semibold text-lg shadow-primary/25 shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-primary/30"
           >
             Get Started Free
             <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-          </Button>
+          </Button> */}
           <p className="mt-6 flex items-center justify-center gap-2 text-muted-foreground text-sm">
             <Shield className="h-4 w-4" />
             No credit card required • Free forever plan
