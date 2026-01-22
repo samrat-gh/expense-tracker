@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Login from "@/components/login";
 import { ModeToggle } from "@/components/theme-menu";
+import WalletCalculatorIcon from "@/icon/wallet-calculator";
 
 export default function Home() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
@@ -31,8 +32,9 @@ export default function Home() {
       <nav className="sticky top-0 z-50 border-border/40 border-b bg-purple-800 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/25">
-              <TrendingUp className="h-5 w-5 text-white" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-gradient-to-br from-purple-700 to-purple-950 shadow-lg shadow-primary/25">
+              {/* <TrendingUp className="h-5 w-5 text-white" /> */}
+              <WalletCalculatorIcon className="h-5 w-5 text-white" />
             </div>
             <span className="font-bold text-xl tracking-tight">FlowTrack</span>
           </div>
@@ -548,13 +550,7 @@ export default function Home() {
             started knowing exactly where their money goes.
           </p>
           <Login />
-          {/* <Button
-            size="lg"
-            className="group hover:-translate-y-0.5 h-14 rounded-xl px-10 font-semibold text-lg shadow-primary/25 shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-primary/30"
-          >
-            Get Started Free
-            <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-          </Button> */}
+
           <p className="mt-6 flex items-center justify-center gap-2 text-muted-foreground text-sm">
             <Shield className="h-4 w-4" />
             No credit card required • Free forever plan
@@ -568,7 +564,7 @@ export default function Home() {
           <div className="mb-12 grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
             <div className="sm:col-span-2 lg:col-span-1">
               <div className="mb-4 flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/25">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-700 to-purple-950 shadow-lg shadow-primary/25">
                   <TrendingUp className="h-4 w-4 text-white" />
                 </div>
                 <span className="font-bold text-xl">FlowTrack</span>
