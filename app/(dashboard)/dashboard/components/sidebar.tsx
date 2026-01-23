@@ -2,15 +2,14 @@
 
 import {
   BarChart2,
-  Building2,
-  CreditCard,
-  Folder,
+  Flag,
   HelpCircle,
   Home,
   Menu,
   Receipt,
   Settings,
   TrendingUp,
+  Ungroup,
   Wallet,
 } from "lucide-react";
 
@@ -80,26 +79,30 @@ export default function Sidebar() {
                   Overview
                 </div>
                 <div className="space-y-1">
-                  <NavItem href="#" icon={Home} onClick={handleNavItemClick}>
+                  <NavItem
+                    href="/dashboard"
+                    icon={Home}
+                    onClick={handleNavItemClick}
+                  >
                     Dashboard
                   </NavItem>
                   <NavItem
-                    href="#"
+                    href="/analytics"
                     icon={BarChart2}
                     onClick={handleNavItemClick}
                   >
                     Analytics
                   </NavItem>
                   <NavItem
-                    href="#"
-                    icon={Building2}
+                    href="/categories"
+                    icon={Ungroup}
                     onClick={handleNavItemClick}
                   >
-                    Organization
+                    Categories
                   </NavItem>
-                  <NavItem href="#" icon={Folder} onClick={handleNavItemClick}>
+                  {/* <NavItem href="#" icon={Folder} onClick={handleNavItemClick}>
                     Projects
-                  </NavItem>
+                  </NavItem> */}
                 </div>
               </div>
 
@@ -108,18 +111,26 @@ export default function Sidebar() {
                   Finance
                 </div>
                 <div className="space-y-1">
-                  <NavItem href="#" icon={Wallet} onClick={handleNavItemClick}>
+                  <NavItem
+                    href="/transactions"
+                    icon={Wallet}
+                    onClick={handleNavItemClick}
+                  >
                     Transactions
                   </NavItem>
-                  <NavItem href="#" icon={Receipt} onClick={handleNavItemClick}>
+                  <NavItem
+                    href="/invoices"
+                    icon={Receipt}
+                    onClick={handleNavItemClick}
+                  >
                     Invoices
                   </NavItem>
                   <NavItem
-                    href="#"
-                    icon={CreditCard}
+                    href="goals"
+                    icon={Flag}
                     onClick={handleNavItemClick}
                   >
-                    Payments
+                    Goals
                   </NavItem>
                 </div>
               </div>
@@ -140,9 +151,16 @@ export default function Sidebar() {
       </nav>
 
       {isMobileMenuOpen && (
-        <div
-          className="fixed inset-0 z-[65] bg-black bg-opacity-50 lg:hidden"
+        <button
+          type="button"
+          className="fixed inset-0 z-65 bg-black bg-opacity-50 lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              setIsMobileMenuOpen(false);
+            }
+          }}
+          aria-label="Close mobile menu"
         />
       )}
     </>

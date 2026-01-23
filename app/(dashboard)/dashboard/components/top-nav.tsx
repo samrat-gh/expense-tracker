@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { Bell, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,7 +9,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ThemeToggle } from "../theme-toggle";
+import { ThemeToggle } from "../../../../components/theme-toggle";
 import Profile01 from "./profile-01";
 
 interface BreadcrumbItem {
@@ -17,9 +18,11 @@ interface BreadcrumbItem {
 }
 
 export default function TopNav() {
+  const { user } = useUser();
+  console.log(user);
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: "FlowTrack", href: "#" },
-    { label: "dashboard", href: "#" },
+    { label: "FlowTrack", href: "/" },
+    { label: "dashboard", href: "/dashboard" },
   ];
 
   return (
@@ -59,8 +62,10 @@ export default function TopNav() {
         <DropdownMenu>
           <DropdownMenuTrigger className="focus:outline-none">
             <Image
-              src="https://ferf1mheo22r9ira.public.blob.vercel-storage.com/avatar-01-n0x8HFv8EUetf9z6ht0wScJKoTHqf8.png"
+              src={user?.imageUrl || "/default-avatar.png"}
               alt="User avatar"
+              placeholder="blur"
+              blurDataURL={"/spinner.webp"}
               width={28}
               height={28}
               className="cursor-pointer rounded-full ring-2 ring-gray-200 sm:h-8 sm:w-8 dark:ring-[#2B2B30]"

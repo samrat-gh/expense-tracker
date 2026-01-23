@@ -179,6 +179,7 @@ export default function List03({ items = ITEMS, className }: List03Props) {
 
             <div className="mt-auto border-zinc-100 border-t dark:border-zinc-800">
               <button
+                type="button"
                 className={cn(
                   "flex w-full items-center justify-center gap-2",
                   "px-3 py-2.5",

@@ -1,29 +1,14 @@
-"use client";
-
-import { useTheme } from "next-themes";
 import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
-import Sidebar from "./sidebar";
-import TopNav from "./top-nav";
+import Sidebar from "@/app/(dashboard)/dashboard/components/sidebar";
+import TopNav from "@/app/(dashboard)/dashboard/components/top-nav";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
-
   return (
-    <div className={`flex h-screen ${theme === "dark" ? "dark" : ""}`}>
+    <div className="flex h-screen">
       <Sidebar />
       <div className="flex w-full flex-1 flex-col">
         <header className="h-16 border-gray-200 border-b dark:border-[#1F1F23]">
