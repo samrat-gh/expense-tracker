@@ -9,15 +9,23 @@ export const metadata: Metadata = {
     "Track income and expenses in seconds. Visualize your cash flow instantly. Built for freelancers and creators with variable income.",
 };
 
+const PatternGradient = ({ children }: { children?: React.ReactNode }) => {
+  return (
+    <div className="relative min-h-screen w-full bg-[#020617] text-white">
+      {/* Emerald Radial Glow Background */}
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(139,92,246,0.25),transparent_70%)]" />
+      <div className="relative">{children}</div>
+    </div>
+  );
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <div className="relative min-h-screen w-full bg-black">
-      <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(139,92,246,0.25),transparent_70%)]" />
-
+    <PatternGradient>
       <ClerkProvider
         appearance={{
           elements: {
@@ -42,6 +50,6 @@ export default function RootLayout({
           </body>
         </html>
       </ClerkProvider>
-    </div>
+    </PatternGradient>
   );
 }
