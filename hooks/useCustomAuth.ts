@@ -43,7 +43,7 @@ export const useCustomSignIn = () => {
       await signIn.authenticateWithRedirect({
         strategy,
         redirectUrl: `${window.location.origin}/sso-callback`,
-        redirectUrlComplete: `${window.location.origin}/focus`,
+        redirectUrlComplete: `${window.location.origin}/dashboard`,
       });
 
       // The function will not return after redirect, but we set loading to false
@@ -168,7 +168,7 @@ export const useCustomSignUp = () => {
       await signUp.authenticateWithRedirect({
         strategy,
         redirectUrl: `${window.location.origin}/sso-callback`,
-        redirectUrlComplete: `${window.location.origin}/focus`,
+        redirectUrlComplete: `${window.location.origin}/dashboard`,
       });
 
       // The function will not return after redirect

@@ -110,7 +110,7 @@ export default function CustomUserMenu() {
               label="Log out"
               onClick={() =>
                 signOut({
-                  redirectUrl: "/focus",
+                  redirectUrl: "/dashboard",
                 })
               }
             />

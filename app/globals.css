@@ -213,14 +213,25 @@ html {
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(
-    135deg,
-    hsl(var(--primary)) 0%,
-    hsl(var(--accent)) 100%
-  );
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Light mode purple glow */
+.light-gradient {
+  background: #ffffff;
+  background-image: radial-gradient(
+    circle at top center,
+    rgba(173, 109, 244, 0.5),
+    transparent 70%
+  );
+  background-repeat: no-repeat;
+  filter: blur(80px);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 @layer base {

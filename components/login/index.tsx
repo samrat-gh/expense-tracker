@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { BarChart3, CheckCircle, Music, User } from "lucide-react";
+import { BarChart3, CheckCircle, Music, type User } from "lucide-react";
 import { useState } from "react";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import CustomSignInForm from "@/components/login/custom-signin-form";
@@ -21,6 +21,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useCustomAuth } from "@/hooks/useCustomAuth";
+import CustomUserMenu from "./user-menu";
 
 export default function Login() {
   const [open, setOpen] = useState(false);
@@ -45,21 +46,8 @@ export default function Login() {
     );
   }
 
-  // User menu when logged in
   if (isSignedIn) {
-    return (
-      <Button
-        variant="ghost"
-        size="icon"
-        className="group relative cursor-pointer overflow-hidden rounded-full border border-white/10 bg-black/30 text-white/90 backdrop-blur-xl transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:text-white"
-      >
-        <div className="absolute inset-0 bg-black/40 to-pink-500/0 transition-all duration-500 group-hover:from-blue-500/10" />
-        <User
-          size={20}
-          className="relative z-10 transition-transform duration-300 group-hover:scale-110"
-        />
-      </Button>
-    );
+    return <CustomUserMenu />;
   }
 
   return (
