@@ -1,9 +1,9 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
+import { useCustomAuth } from "@/hooks/useCustomAuth";
 
 const Page = () => {
-  const { user, isLoaded: userLoaded } = useUser();
+  const { user } = useCustomAuth();
 
   return <div>{JSON.stringify(user, null, 2)}</div>;
 };

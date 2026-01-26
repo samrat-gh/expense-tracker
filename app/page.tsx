@@ -28,18 +28,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen overflow-hidden bg-background text-foreground">
-      {/* Navigation */}
       <Navbar />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden px-4 pt-24 pb-20 sm:px-6 sm:pt-32 lg:px-8">
-        {/* Background decorations */}
-        <div className="-z-10 absolute top-20 left-1/4 h-[500px] w-[500px] rounded-full bg-primary/10 blur-[120px]"></div>
-        <div className="-z-10 absolute right-1/4 bottom-0 h-[400px] w-[400px] rounded-full bg-accent/10 blur-[100px]"></div>
-        <div className="-translate-x-1/2 -translate-y-1/2 -z-10 absolute top-1/2 left-1/2 h-[800px] w-[800px] rounded-full bg-gradient-radial from-primary/5 to-transparent"></div>
-
         <div className="mx-auto max-w-6xl">
-          {/* Badge */}
           <div
             className={`mb-8 flex justify-center transition-all duration-700 ${
               mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
@@ -80,7 +73,7 @@ export default function Home() {
           >
             <Link
               href="/dashboard"
-              className="group hover:-translate-y-0.5 rounded-xl px-8 py-3 font-semibold text-base shadow-primary/25 shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-primary/30 dark:bg-purple-50 dark:text-black dark:hover:bg-white dark:hover:text-purple-900"
+              className="group hover:-translate-y-0.5 rounded-xl bg-purple-50 px-8 py-3 font-semibold text-base shadow-primary/25 shadow-xl transition-all duration-300 hover:bg-white hover:shadow-2xl hover:shadow-primary/30 dark:text-black dark:hover:text-purple-900"
             >
               Start Tracking
               <ArrowRight className="ml-2 inline h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -466,7 +459,7 @@ export default function Home() {
               },
               {
                 q: "What if I have multiple income sources?",
-                a: "FlowTrack was built exactly for this. Tag income sources, track multiple streams, and see your complete financial picture in one place.",
+                a: "Transact was built exactly for this. Tag income sources, track multiple streams, and see your complete financial picture in one place.",
               },
               {
                 q: "Is there a free version?",
@@ -474,7 +467,7 @@ export default function Home() {
               },
               {
                 q: "Does it work offline?",
-                a: "Yes. FlowTrack works fully offline and syncs automatically when you're back online. Never miss a transaction.",
+                a: "No. Transact doesn't work as it is a web application that requires an internet connection to function properly.",
               },
             ].map((item) => (
               <details

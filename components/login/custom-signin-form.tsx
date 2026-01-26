@@ -2,30 +2,36 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { useCustomSignIn } from "@/hooks/useCustomAuth";
+import { signIn } from "@/lib/auth-client";
 
 interface CustomSignInFormProps {
   onSuccess?: () => void;
 }
 
 export default function CustomSignInForm({ onSuccess }: CustomSignInFormProps) {
-  const { signInWithOAuth, isLoading } = useCustomSignIn();
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const handleGoogleSignIn = async () => {
+  const handleSocialSignIn = async (provider: "google") => {
+    setIsLoading(true);
     try {
-      await signInWithOAuth("oauth_google");
-      onSuccess?.();
-    } catch (error) {
-      console.error("Google sign in error:", error);
+      await signIn.social({
+        provider,
+        callbackURL: "/dashboard",
+      });
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
     }
+    setIsLoading(false);
   };
 
   return (
     <div className="space-y-4">
       <Button
         type="button"
-        onClick={handleGoogleSignIn}
+        onClick={() => handleSocialSignIn("google")}
         disabled={isLoading}
         className="flex h-12 w-full cursor-pointer items-center justify-center gap-3 border border-gray-300 bg-white text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
       >

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
 import { productConfig } from "@/data/config";
 
@@ -47,30 +46,19 @@ export default function RootLayout({
 }>) {
   return (
     <PatternGradient>
-      <ClerkProvider
-        appearance={{
-          elements: {
-            logo: "hidden",
-            footer: "hidden",
-            cardFooter: "hidden",
-            userButtonPopoverFooter: "hidden",
-          },
-        }}
-      >
-        <html lang="en" suppressHydrationWarning>
-          <head />
-          <body className="antialiased">
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              {children}
-            </ThemeProvider>
-          </body>
-        </html>
-      </ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <head />
+        <body className="antialiased">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
     </PatternGradient>
   );
 }

@@ -1,3 +1,4 @@
+import { productConfig } from "@/data/config";
 import Logo from "./logo";
 
 export default function Footer() {
@@ -118,7 +119,7 @@ export default function Footer() {
         </div>
         <div className="flex flex-col items-center justify-between gap-4 border-border border-t pt-8 sm:flex-row">
           <p className="text-muted-foreground text-sm">
-            © 2026 FlowTrack. All rights reserved.
+            © 2026 {productConfig.name}. All rights reserved.
           </p>
           <div className="flex gap-4">
             <a

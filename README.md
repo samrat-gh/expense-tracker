@@ -20,14 +20,13 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Authentication (Clerk)
+## Authentication (Better Auth)
 
-This project uses [Clerk](https://clerk.com) for authentication.
+This project uses [Better Auth](https://www.better-auth.com) for authentication.
 
 ### Setup
 
-1. Create a Clerk application at https://dashboard.clerk.com and get your keys.
-2. Copy `.env.example` to `.env.local` and fill in the values:
+1. Copy `.env.example` to `.env.local` and fill in the values:
 
 ```bash
 cp .env.example .env.local
@@ -35,22 +34,38 @@ cp .env.example .env.local
 
 Required:
 
-- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
-- `CLERK_SECRET_KEY`
+- `DATABASE_URL` - Your MongoDB connection string
+- `BETTER_AUTH_SECRET` - Generate with: `openssl rand -base64 32`
+- `NEXT_PUBLIC_APP_URL` - Your app URL (http://localhost:3000 for development)
 
-Optional (uncomment in `.env.example`):
+Optional (for OAuth providers):
 
-- `NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in`
-- `NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up`
-- `NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/`
-- `NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/`
+- `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`
+- `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`
+
+2. Push the database schema:
+
+```bash
+pnpm db:push
+```
 
 ### Routes
 
 - Sign In: `/sign-in`
 - Sign Up: `/sign-up`
+- Dashboard: `/dashboard` (protected)
 
-All routes except `/`, `/sign-in`, and `/sign-up` are protected via `middleware.ts`.
+All routes except `/`, `/sign-in`, and `/sign-up` are protected via `proxy.ts` middleware.
+
+### Features
+
+- ✅ Email & Password authentication
+- ✅ Google OAuth
+- ✅ GitHub OAuth
+- ✅ Session management
+- ✅ Protected routes
+
+For detailed migration information, see [MIGRATION.md](./MIGRATION.md).
 
 ## Learn More
 

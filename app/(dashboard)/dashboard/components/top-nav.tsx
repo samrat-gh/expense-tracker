@@ -1,15 +1,16 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
 import { Bell, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ThemeToggle } from "../../../../components/theme-toggle";
+import { productConfig } from "@/data/config";
+import { useCustomAuth } from "@/hooks/useCustomAuth";
 import Profile01 from "./profile-01";
 
 interface BreadcrumbItem {
@@ -18,10 +19,10 @@ interface BreadcrumbItem {
 }
 
 export default function TopNav() {
-  const { user } = useUser();
-  console.log(user);
+  const { user } = useCustomAuth();
+  // console.log(user);
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: "FlowTrack", href: "/" },
+    { label: productConfig.name, href: "/" },
     { label: "dashboard", href: "/dashboard" },
   ];
 
@@ -62,7 +63,7 @@ export default function TopNav() {
         <DropdownMenu>
           <DropdownMenuTrigger className="focus:outline-none">
             <Image
-              src={user?.imageUrl || "/default-avatar.png"}
+              src={user?.image || "/default-avatar.png"}
               alt="User avatar"
               placeholder="blur"
               blurDataURL={"/spinner.webp"}

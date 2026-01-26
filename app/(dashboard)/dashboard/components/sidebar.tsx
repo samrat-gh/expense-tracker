@@ -8,13 +8,12 @@ import {
   Menu,
   Receipt,
   Settings,
-  TrendingUp,
   Ungroup,
   Wallet,
 } from "lucide-react";
-
 import Link from "next/link";
 import { useState } from "react";
+import Logo from "@/components/logo";
 
 function NavItem({
   href,
@@ -63,13 +62,9 @@ export default function Sidebar() {
           <Link
             href="/"
             className="flex h-16 items-center border-gray-200 border-b px-6 dark:border-[#1F1F23]"
+            passHref
           >
-            <div className="mb-4 flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-700 to-purple-950 shadow-lg shadow-primary/25">
-                <TrendingUp className="h-4 w-4 text-white" />
-              </div>
-              <span className="font-bold text-xl">FlowTrack</span>
-            </div>
+            <Logo />
           </Link>
 
           <div className="flex-1 overflow-y-auto px-4 py-4">

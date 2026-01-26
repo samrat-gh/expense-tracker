@@ -1,7 +1,6 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
-import { BarChart3, CheckCircle, Music, type User } from "lucide-react";
+import { BarChart3, CheckCircle, Goal, type User } from "lucide-react";
 import { useState } from "react";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import CustomSignInForm from "@/components/login/custom-signin-form";
@@ -26,14 +25,13 @@ import CustomUserMenu from "./user-menu";
 export default function Login() {
   const [open, setOpen] = useState(false);
   const { isLoaded, isSignedIn } = useCustomAuth();
-  const { user, isLoaded: userLoaded } = useUser();
 
   const handleAuthSuccess = () => {
     setOpen(false);
   };
 
   // Loading state
-  if (!isLoaded || !userLoaded) {
+  if (!isLoaded) {
     return (
       <Button
         variant="ghost"
@@ -56,7 +54,7 @@ export default function Login() {
         <Tooltip delayDuration={700}>
           <TooltipTrigger asChild>
             <DialogTrigger asChild>
-              <Button className="hidden shadow-lg shadow-primary/25 transition-all duration-300 hover:shadow-primary/30 hover:shadow-xl sm:inline-flex">
+              <Button className="hidden bg-white text-black shadow-lg shadow-primary/25 transition-all duration-300 hover:shadow-primary/30 hover:shadow-xl sm:inline-flex">
                 Get Started
               </Button>
             </DialogTrigger>
@@ -67,15 +65,15 @@ export default function Login() {
           </TooltipContent>
         </Tooltip>
 
-        <DialogContent className="border border-white/20 bg-black/40 text-white shadow-xl backdrop-blur-md sm:max-w-md">
+        <DialogContent className="border border-purple/20 bg-purple/80 text-white shadow-xl backdrop-blur-md sm:max-w-md">
           <div className="absolute inset-0 animate-gradient-shift" />
           <div className="relative z-10">
             <DialogHeader className="space-y-3 pb-2 text-center">
               <DialogTitle className="bg-gradient-to-r from-white to-white/80 bg-clip-text font-semibold text-2xl text-transparent">
-                Login to PomoFocus
+                Login to Transact
               </DialogTitle>
               <DialogDescription className="text-sm text-white/60 leading-relaxed">
-                Unlock your productivity potential with personalized features
+                Manage your financials with personalized features
               </DialogDescription>
             </DialogHeader>
 
@@ -85,20 +83,20 @@ export default function Login() {
                   <FeatureItem
                     icon={CheckCircle}
                     color="emerald"
-                    title="Sync & Save Progress"
-                    desc="Never lose your productivity streak"
+                    title="Record and Track Expenses"
+                    desc="Never lose your financial streak"
                   />
                   <FeatureItem
                     icon={BarChart3}
                     color="blue"
                     title="Advanced Analytics"
-                    desc="Track your focus patterns"
+                    desc="Track your financial trends"
                   />
                   <FeatureItem
-                    icon={Music}
+                    icon={Goal}
                     color="purple"
-                    title="Custom Playlists"
-                    desc="Curate your focus soundtrack"
+                    title="Budget Planning"
+                    desc="Plan and manage your budgets effectively"
                   />
                 </div>
               </div>

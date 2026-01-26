@@ -1,4 +1,5 @@
 import { FaMoneyCheckDollar } from "react-icons/fa6";
+import { productConfig } from "@/data/config";
 
 export default function Logo() {
   return (
@@ -11,7 +12,7 @@ export default function Logo() {
         />
       </div>
       <span className="relative font-bold light:text-purple-900 text-xl tracking-widest dark:text-purple-50">
-        Transact
+        {productConfig.name}
       </span>
     </div>
   );
