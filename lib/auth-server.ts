@@ -12,6 +12,7 @@ export async function getSession() {
 export async function requireAuth() {
   const session = await getSession();
 
+  console.log(session);
   if (!session) {
     throw new Error("Unauthorized");
   }

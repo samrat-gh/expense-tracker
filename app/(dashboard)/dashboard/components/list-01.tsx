@@ -2,71 +2,43 @@ import {
   ArrowDownLeft,
   ArrowRight,
   ArrowUpRight,
-  CreditCard,
   Plus,
   QrCode,
   SendHorizontal,
   Wallet,
 } from "lucide-react";
+import { getAccounts } from "@/lib/actions/account";
 import { cn } from "@/lib/utils";
 
-interface AccountItem {
-  id: string;
-  title: string;
-  description?: string;
-  balance: string;
-  type: "savings" | "checking" | "investment" | "debt";
-}
-
 interface List01Props {
-  totalBalance?: string;
-  accounts?: AccountItem[];
   className?: string;
 }
 
-const ACCOUNTS: AccountItem[] = [
-  {
-    id: "1",
-    title: "Main Savings",
-    description: "Personal savings",
-    balance: "$8,459.45",
-    type: "savings",
-  },
-  {
-    id: "2",
-    title: "Checking Account",
-    description: "Daily expenses",
-    balance: "$2,850.00",
-    type: "checking",
-  },
-  {
-    id: "3",
-    title: "Investment Portfolio",
-    description: "Stock & ETFs",
-    balance: "$15,230.80",
-    type: "investment",
-  },
-  {
-    id: "4",
-    title: "Credit Card",
-    description: "Pending charges",
-    balance: "$1,200.00",
-    type: "debt",
-  },
-  {
-    id: "5",
-    title: "Savings Account",
-    description: "Emergency fund",
-    balance: "$3,000.00",
-    type: "savings",
-  },
-];
+export default async function List01({ className }: List01Props) {
+  const result = await getAccounts();
+  const accounts = result.success && result.data ? result.data : [];
 
-export default function List01({
-  totalBalance = "$26,540.25",
-  accounts = ACCOUNTS,
-  className,
-}: List01Props) {
+  const totalBalance = accounts.reduce(
+    (
+      sum: number,
+      account: {
+        id: string;
+        name: string;
+        type: string;
+        balance: number;
+      },
+    ) => sum + account.balance,
+    0,
+  );
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "NRS",
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
+
   return (
     <div
       className={cn(
@@ -83,7 +55,7 @@ export default function List01({
           Total Balance
         </p>
         <h1 className="font-semibold text-2xl text-zinc-900 dark:text-zinc-50">
-          {totalBalance}
+          {formatCurrency(totalBalance)}
         </h1>
       </div>
 
@@ -96,63 +68,66 @@ export default function List01({
         </div>
 
         <div className="space-y-1">
-          {accounts.map((account) => (
-            <div
-              key={account.id}
-              className={cn(
-                "group flex items-center justify-between",
-                "rounded-lg p-2",
-                "hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
-                "transition-all duration-200",
-              )}
-            >
-              <div className="flex items-center gap-2">
-                <div
-                  className={cn("rounded-lg p-1.5", {
-                    "bg-emerald-100 dark:bg-emerald-900/30":
-                      account.type === "savings",
-                    "bg-blue-100 dark:bg-blue-900/30":
-                      account.type === "checking",
-                    "bg-purple-100 dark:bg-purple-900/30":
-                      account.type === "investment",
-                  })}
-                >
-                  {account.type === "savings" && (
-                    <Wallet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                  )}
-                  {account.type === "checking" && (
-                    <QrCode className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-                  )}
-                  {account.type === "investment" && (
-                    <ArrowUpRight className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
-                  )}
-                  {account.type === "debt" && (
-                    <CreditCard className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
-                  )}
-                </div>
-                <div>
-                  <h3 className="font-medium text-xs text-zinc-900 dark:text-zinc-100">
-                    {account.title}
-                  </h3>
-                  {account.description && (
+          {accounts.length > 0 ? (
+            accounts.map((account) => (
+              <div
+                key={account.id}
+                className={cn(
+                  "group flex items-center justify-between",
+                  "rounded-lg p-2",
+                  "hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
+                  "transition-all duration-200",
+                )}
+              >
+                <div className="flex items-center gap-2">
+                  <div
+                    className={cn("rounded-lg p-1.5", {
+                      "bg-emerald-100 dark:bg-emerald-900/30":
+                        account.type === "savings",
+                      "bg-blue-100 dark:bg-blue-900/30":
+                        account.type === "investment",
+                      "bg-purple-100 dark:bg-purple-900/30":
+                        account.type === "investment",
+                    })}
+                  >
+                    {account.type === "savings" && (
+                      <Wallet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                    )}
+                    {account.type === "investment" && (
+                      <ArrowUpRight className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+                    )}
+                    {!["savings", "investment"].includes(account.type) && (
+                      <QrCode className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-xs text-zinc-900 dark:text-zinc-100">
+                      {account.name}
+                    </h3>
                     <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
-                      {account.description}
+                      {account.type}
                     </p>
-                  )}
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <span className="font-medium text-xs text-zinc-900 dark:text-zinc-100">
+                    {formatCurrency(account.balance)}
+                  </span>
                 </div>
               </div>
-
-              <div className="text-right">
-                <span className="font-medium text-xs text-zinc-900 dark:text-zinc-100">
-                  {account.balance}
-                </span>
-              </div>
+            ))
+          ) : (
+            <div className="py-4 text-center">
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                No accounts yet. Create one to get started.
+              </p>
             </div>
-          ))}
+          )}
         </div>
       </div>
 
-      {/* Updated footer with four buttons */}
+      {/* Action buttons */}
       <div className="border-zinc-100 border-t p-2 dark:border-zinc-800">
         <div className="grid grid-cols-4 gap-2">
           <button

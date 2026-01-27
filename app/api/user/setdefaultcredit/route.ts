@@ -1,18 +1,20 @@
 import { NextResponse } from "next/server";
-import { requireAuth } from "@/lib/auth-server";
+import { getSession } from "@/lib/auth-server";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
   try {
-    const session = await requireAuth();
-    const userId = session.user.id;
+    const session = await getSession();
 
-    if (!userId) {
+    if (!session) {
       return NextResponse.json(
         { success: false, message: "Unauthorized" },
         { status: 401 },
       );
     }
+
+    const userId = session.user.id;
+    console.log("Session found for user:", userId);
 
     // Parse request body
     const { initialAmount } = await request.json();

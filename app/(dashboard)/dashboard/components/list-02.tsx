@@ -7,99 +7,57 @@ import {
   ShoppingCart,
   Wallet,
 } from "lucide-react";
+import { getTransactions } from "@/lib/actions/transaction";
 import { cn } from "@/lib/utils";
 
-interface Transaction {
-  id: string;
-  title: string;
-  amount: string;
-  type: "incoming" | "outgoing";
-  category: string;
-  icon: LucideIcon;
-  timestamp: string;
-  status: "completed" | "pending" | "failed";
-}
-
 interface List02Props {
-  transactions?: Transaction[];
   className?: string;
 }
 
-const categoryStyles = {
-  shopping: "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
-  food: "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
-  transport: "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
-  entertainment:
-    "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
+const getCategoryIcon = (category: string): LucideIcon => {
+  switch (category?.toLowerCase()) {
+    case "shopping":
+      return ShoppingCart;
+    case "food":
+      return CreditCard;
+    case "transport":
+      return Wallet;
+    default:
+      return CreditCard;
+  }
 };
 
-const TRANSACTIONS: Transaction[] = [
-  {
-    id: "1",
-    title: "Apple Store Purchase",
-    amount: "$999.00",
-    type: "outgoing",
-    category: "shopping",
-    icon: ShoppingCart,
-    timestamp: "Today, 2:45 PM",
-    status: "completed",
-  },
-  {
-    id: "2",
-    title: "Salary Deposit",
-    amount: "$4,500.00",
-    type: "incoming",
-    category: "transport",
-    icon: Wallet,
-    timestamp: "Today, 9:00 AM",
-    status: "completed",
-  },
-  {
-    id: "3",
-    title: "Netflix Subscription",
-    amount: "$15.99",
-    type: "outgoing",
-    category: "entertainment",
-    icon: CreditCard,
-    timestamp: "Yesterday",
-    status: "pending",
-  },
-  {
-    id: "4",
-    title: "Apple Store Purchase",
-    amount: "$999.00",
-    type: "outgoing",
-    category: "shopping",
-    icon: ShoppingCart,
-    timestamp: "Today, 2:45 PM",
-    status: "completed",
-  },
-  {
-    id: "5",
-    title: "Supabase Subscription",
-    amount: "$15.99",
-    type: "outgoing",
-    category: "entertainment",
-    icon: CreditCard,
-    timestamp: "Yesterday",
-    status: "pending",
-  },
-  {
-    id: "6",
-    title: "Vercel Subscription",
-    amount: "$15.99",
-    type: "outgoing",
-    category: "entertainment",
-    icon: CreditCard,
-    timestamp: "Yesterday",
-    status: "pending",
-  },
-];
+export default async function List02({ className }: List02Props) {
+  const result = await getTransactions(10);
+  const transactions = result.success ? result.data?.transactions : [];
+  const totalCount = result.success ? result.data?.total : 0;
 
-export default function List02({
-  transactions = TRANSACTIONS,
-  className,
-}: List02Props) {
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "NRS",
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  const formatDate = (date: Date | string) => {
+    const d = typeof date === "string" ? new Date(date) : date;
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (d.toDateString() === today.toDateString()) {
+      return d.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } else if (d.toDateString() === yesterday.toDateString()) {
+      return "Yesterday";
+    } else {
+      return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -113,68 +71,76 @@ export default function List02({
       <div className="p-4">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">
-            Recent Activity
+            Recent Transactions
             <span className="ml-1 font-normal text-xs text-zinc-600 dark:text-zinc-400">
-              (23 transactions)
+              ({totalCount} total)
             </span>
           </h2>
-          <span className="text-xs text-zinc-600 dark:text-zinc-400">
-            This Month
-          </span>
         </div>
 
         <div className="space-y-1">
-          {transactions.map((transaction) => (
-            <div
-              key={transaction.id}
-              className={cn(
-                "group flex items-center gap-3",
-                "rounded-lg p-2",
-                "hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
-                "transition-all duration-200",
-              )}
-            >
-              <div
-                className={cn(
-                  "rounded-lg p-2",
-                  "bg-zinc-100 dark:bg-zinc-800",
-                  "border border-zinc-200 dark:border-zinc-700",
-                )}
-              >
-                <transaction.icon className="h-4 w-4 text-zinc-900 dark:text-zinc-100" />
-              </div>
-
-              <div className="flex min-w-0 flex-1 items-center justify-between">
-                <div className="space-y-0.5">
-                  <h3 className="font-medium text-xs text-zinc-900 dark:text-zinc-100">
-                    {transaction.title}
-                  </h3>
-                  <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
-                    {transaction.timestamp}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-1.5 pl-3">
-                  <span
+          {transactions && transactions.length > 0 ? (
+            transactions.map((transaction: any) => {
+              const Icon = getCategoryIcon(transaction.category?.name);
+              return (
+                <div
+                  key={transaction.id}
+                  className={cn(
+                    "group flex items-center gap-3",
+                    "rounded-lg p-2",
+                    "hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
+                    "transition-all duration-200",
+                  )}
+                >
+                  <div
                     className={cn(
-                      "font-medium text-xs",
-                      transaction.type === "incoming"
-                        ? "text-emerald-600 dark:text-emerald-400"
-                        : "text-red-600 dark:text-red-400",
+                      "rounded-lg p-2",
+                      "bg-zinc-100 dark:bg-zinc-800",
+                      "border border-zinc-200 dark:border-zinc-700",
                     )}
                   >
-                    {transaction.type === "incoming" ? "+" : "-"}
-                    {transaction.amount}
-                  </span>
-                  {transaction.type === "incoming" ? (
-                    <ArrowDownLeft className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                  ) : (
-                    <ArrowUpRight className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
-                  )}
+                    <Icon className="h-4 w-4 text-zinc-900 dark:text-zinc-100" />
+                  </div>
+
+                  <div className="flex min-w-0 flex-1 items-center justify-between">
+                    <div className="space-y-0.5">
+                      <h3 className="font-medium text-xs text-zinc-900 dark:text-zinc-100">
+                        {transaction.category?.name || "Uncategorized"}
+                      </h3>
+                      <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
+                        {transaction.remarks || transaction.account?.name}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 pl-3">
+                      <span
+                        className={cn(
+                          "font-medium text-xs",
+                          transaction.type === "Credit"
+                            ? "text-emerald-600 dark:text-emerald-400"
+                            : "text-red-600 dark:text-red-400",
+                        )}
+                      >
+                        {transaction.type === "Credit" ? "+" : "-"}
+                        {formatCurrency(transaction.amount)}
+                      </span>
+                      {transaction.type === "Credit" ? (
+                        <ArrowDownLeft className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                      ) : (
+                        <ArrowUpRight className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              );
+            })
+          ) : (
+            <div className="py-8 text-center">
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                No transactions yet.
+              </p>
             </div>
-          ))}
+          )}
         </div>
       </div>
 

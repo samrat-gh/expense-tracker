@@ -7,30 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id            String    @id @map("_id")
-  name          String?
-  email         String    @unique
-  emailVerified Boolean   @default(false)
-  image         String?
-  currency      String    @default("NRS")
-  timezone      String    @default("UTC")
-  balance       Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  bankAccounts          BankAccount[]
-  accounts              Account[]
-  sessions              Session[]
-  transactions          Transaction[]
-  categories            Category[]
-  budgets               Budget[]
-  goals                 Goal[]
-  invoices              Invoice[]
-  recurringTransactions RecurringTransaction[]
-  paymentMethods        PaymentMethod[]
-  tags                  Tag[]
-  settings              UserSettings?
+  id        String   @id @map("_id")
+  name      String?
+  email     String   @unique
+  image     String?
+  currency  String   @default("NRS")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accounts     BankAccount[]
+  transactions Transaction[]
+  categories   Category[]
+  sessions     Session[]
 
   @@map("users")
 }
@@ -49,307 +38,54 @@ model Session {
   @@map("sessions")
 }
 
-model Account {
-  id                String   @id @map("_id")
-  accountId         String
-  providerId        String
-  userId            String
-  accessToken       String?
-  refreshToken      String?
-  idToken           String?
-  accessTokenExpiresAt DateTime?
-  refreshTokenExpiresAt DateTime?
-  scope             String?
-  password          String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([providerId, accountId])
-  @@map("accounts")
-}
-
-model Verification {
-  id         String   @id @map("_id")
-  identifier String
-  value      String
-  expiresAt  DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  @@unique([identifier, value])
-  @@map("verifications")
-}
-
-// Bank Accounts Collection (renamed to avoid conflict)
 model BankAccount {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String   @db.ObjectId
-  name            String
-  type            String // checking, savings, credit_card, cash, investment
-  balance         Int      @default(0) // Store as cents/smallest unit
-  currency        String   @default("USD")
-  color           String? // hex color for UI
-  icon            String? // icon identifier
-  isActive        Boolean  @default(true)
-  institutionName String? // Bank name
-  accountNumber   String? // Last 4 digits
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  name      String
+  type      String // savings, investment, etc.
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  // Relations
-  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  transactions          Transaction[]
-  recurringTransactions RecurringTransaction[]
-  paymentMethods        PaymentMethod[]
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
 
   @@index([userId])
   @@map("bank_accounts")
 }
 
-// Categories Collection
 model Category {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId           String   @db.ObjectId
-  name             String
-  type             String // income, expense
-  color            String? // hex color
-  icon             String? // icon identifier
-  parentCategoryId String?  @db.ObjectId
-  isSystem         Boolean  @default(false) // system categories can't be deleted
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  // Relations
-  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  parent                Category?              @relation("CategoryToCategory", fields: [parentCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  subcategories         Category[]             @relation("CategoryToCategory")
-  transactions          Transaction[]
-  budgets               Budget[]
-  recurringTransactions RecurringTransaction[]
-
-  @@index([userId])
-  @@index([parentCategoryId])
-  @@map("categories")
-}
-
-// Transactions Collection
-model Transaction {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String   @db.ObjectId
-  accountId   String   @db.ObjectId
-  categoryId  String   @db.ObjectId
-  type        String // income, expense, transfer
-  amount      Int // Store as cents/smallest unit
-  currency    String   @default("USD")
-  description String?
-  notes       String?
-  date        DateTime
-  payee       String? // Who you paid or received from
-  reference   String? // Check number, transaction ID, etc.
-  isRecurring Boolean  @default(false)
-  recurringId String?  @db.ObjectId // Link to recurring transaction template
-  tags        String[] // Array of tags
-  attachments String[] // Array of file URLs
-  invoiceId   String?  @db.ObjectId // Link to invoice if applicable
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Relations
-  user                User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  account             BankAccount           @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  category            Category              @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  invoice             Invoice?              @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
-  recurringTemplate   RecurringTransaction? @relation(fields: [recurringId], references: [id], onDelete: SetNull)
-
-  @@index([userId])
-  @@index([accountId])
-  @@index([categoryId])
-  @@index([date])
-  @@index([invoiceId])
-  @@index([recurringId])
-  @@map("transactions")
-}
-
-// Recurring Transactions Templates
-model RecurringTransaction {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String    @db.ObjectId
-  accountId     String    @db.ObjectId
-  categoryId    String    @db.ObjectId
-  type          String // income, expense, transfer
-  amount        Int
-  currency      String    @default("USD")
-  description   String?
-  frequency     String // daily, weekly, monthly, yearly
-  interval      Int       @default(1) // Every X days/weeks/months
-  startDate     DateTime
-  endDate       DateTime? // null for indefinite
-  lastGenerated DateTime?
-  nextDue       DateTime
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  // Relations
-  user                  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  account               BankAccount   @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  category              Category      @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  generatedTransactions Transaction[]
-
-  @@index([userId])
-  @@index([accountId])
-  @@index([categoryId])
-  @@index([nextDue])
-  @@map("recurring_transactions")
-}
-
-// Budgets Collection
-model Budget {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId         String    @db.ObjectId
-  categoryId     String    @db.ObjectId
-  name           String
-  amount         Int // Budget limit in cents
-  period         String // weekly, monthly, yearly
-  startDate      DateTime
-  endDate        DateTime?
-  alertThreshold Int       @default(80) // Alert at 80% by default
-  isActive       Boolean   @default(true)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-
-  // Relations
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([categoryId])
-  @@map("budgets")
-}
-
-// Financial Goals Collection
-model Goal {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String    @db.ObjectId
-  name          String
-  description   String?
-  targetAmount  Int
-  currentAmount Int       @default(0)
-  currency      String    @default("USD")
-  targetDate    DateTime?
-  priority      String    @default("medium") // low, medium, high
-  status        String    @default("active") // active, completed, paused, cancelled
-  icon          String?
-  color         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([status])
-  @@map("goals")
-}
-
-// Invoices Collection
-model Invoice {
-  id             String       @id @default(auto()) @map("_id") @db.ObjectId
-  userId         String       @db.ObjectId
-  invoiceNumber  String       @unique
-  clientName     String
-  clientEmail    String?
-  clientAddress  String?
-  issueDate      DateTime
-  dueDate        DateTime
-  subtotal       Int
-  taxAmount      Int          @default(0)
-  taxRate        Int          @default(0) // stored as percentage * 100 (e.g., 15.5% = 1550)
-  discountAmount Int          @default(0)
-  totalAmount    Int
-  currency       String       @default("USD")
-  status         String       @default("draft") // draft, sent, paid, overdue, cancelled
-  notes          String?
-  terms          String?
-  items          InvoiceItem[] // Array of line items
-  paidDate       DateTime?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-
-  // Relations
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
 
   @@index([userId])
-  @@index([status])
-  @@index([dueDate])
-  @@map("invoices")
+  @@map("categories")
 }
 
-// Invoice Line Items (embedded in Invoice)
-type InvoiceItem {
-  description String
-  quantity    Int
-  unitPrice   Int // in cents
-  amount      Int // in cents
-}
-
-// Payment Methods Collection
-model PaymentMethod {
+model Transaction {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String   @db.ObjectId
-  accountId   String?  @db.ObjectId // Optional link to account
-  name        String
-  type        String // credit_card, debit_card, paypal, etc.
-  lastFour    String?
-  expiryMonth Int?
-  expiryYear  Int?
-  isDefault   Boolean  @default(false)
-  isActive    Boolean  @default(true)
+  userId      String
+  accountId   String
+  categoryId  String
+  amount      Int
+  type        String // Debit, Credit
+  method      String // Cash, Online
+  remarks     String?
+  date        DateTime @default(now())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // Relations
-  user    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  account BankAccount? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account  BankAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  category Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([accountId])
-  @@map("payment_methods")
-}
-
-// Tags Collection for better organization
-model Tag {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  name      String
-  color     String?
-  createdAt DateTime @default(now())
-
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, name])
-  @@index([userId])
-  @@map("tags")
-}
-
-// User Settings/Preferences
-model UserSettings {
-  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String   @unique @db.ObjectId
-  theme              String   @default("system") // light, dark, system
-  language           String   @default("en")
-  dateFormat         String   @default("MM/DD/YYYY")
-  firstDayOfWeek     Int      @default(0) // 0 = Sunday, 1 = Monday
-  notifications      Json? // JSON object for notification preferences
-  emailNotifications Boolean  @default(true)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("user_settings")
+  @@index([categoryId])
+  @@map("transactions")
 }

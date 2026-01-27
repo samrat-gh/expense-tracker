@@ -1,29 +1,24 @@
+import { headers } from "next/headers";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { auth } from "./lib/auth";
 
 const publicRoutes = ["/", "/sign-in", "/sign-up"];
 
-export default async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  // Check if the route is public
+export async function proxy(request: NextRequest) {
   const isPublicRoute = publicRoutes.some((route) =>
-    pathname.startsWith(route),
+    request.url.startsWith(route),
   );
 
-  // Get session cookie
-  const sessionToken = request.cookies.get("better-auth.session_token");
+  if (!isPublicRoute) {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
 
-  // If trying to access protected route without session, redirect to sign-in
-  if (!isPublicRoute && !sessionToken) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+    if (!session) {
+      return NextResponse.redirect(new URL("/sign-in", request.url));
+    }
   }
-
-  // If signed in and trying to access auth pages, redirect to dashboard
-  // if (isPublicRoute && sessionToken && pathname !== "/") {
-  //   return NextResponse.redirect(new URL("/dashboard", request.url));
-  // }
-
   return NextResponse.next();
 }
 

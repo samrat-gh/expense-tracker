@@ -1,188 +1,173 @@
-import {
-  AlertCircle,
-  ArrowRight,
-  Calendar,
-  CheckCircle2,
-  CreditCard,
-  type LucideIcon,
-  PiggyBank,
-  Timer,
-  TrendingUp,
-} from "lucide-react";
-import React from "react";
+import { ArrowRight, TrendingDown, TrendingUp } from "lucide-react";
+import { getCategories } from "@/lib/actions/category";
 import { cn } from "@/lib/utils";
 
-interface ListItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  icon: LucideIcon;
-  iconStyle: string;
-  date: string;
-  time?: string;
-  amount?: string;
-  status: "pending" | "in-progress" | "completed";
-  progress?: number;
-}
-
 interface List03Props {
-  items?: ListItem[];
   className?: string;
 }
 
-const iconStyles = {
-  savings: "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
-  investment: "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
-  debt: "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100",
-};
+export default async function List03({ className }: List03Props) {
+  const result = await getCategories();
+  const categories = result.success ? result.data : [];
 
-const statusConfig = {
-  pending: {
-    icon: Timer,
-    class: "text-amber-600 dark:text-amber-400",
-    bg: "bg-amber-100 dark:bg-amber-900/30",
-  },
-  "in-progress": {
-    icon: AlertCircle,
-    class: "text-blue-600 dark:text-blue-400",
-    bg: "bg-blue-100 dark:bg-blue-900/30",
-  },
-  completed: {
-    icon: CheckCircle2,
-    class: "text-emerald-600 dark:text-emerald-400",
-    bg: "bg-emerald-100 dark:bg-emerald-900/30",
-  },
-};
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "NRS",
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
 
-const ITEMS: ListItem[] = [
-  {
-    id: "1",
-    title: "Emergency Fund",
-    subtitle: "3 months of expenses saved",
-    icon: PiggyBank,
-    iconStyle: "savings",
-    date: "Target: Dec 2024",
-    amount: "$15,000",
-    status: "in-progress",
-    progress: 65,
-  },
-  {
-    id: "2",
-    title: "Stock Portfolio",
-    subtitle: "Tech sector investment plan",
-    icon: TrendingUp,
-    iconStyle: "investment",
-    date: "Target: Jun 2024",
-    amount: "$50,000",
-    status: "pending",
-    progress: 30,
-  },
-  {
-    id: "3",
-    title: "Debt Repayment",
-    subtitle: "Student loan payoff plan",
-    icon: CreditCard,
-    iconStyle: "debt",
-    date: "Target: Mar 2025",
-    amount: "$25,000",
-    status: "in-progress",
-    progress: 45,
-  },
-];
+  // Calculate total spending
+  const totalSpending = categories.reduce(
+    (sum, cat) => sum + cat.totalAmount,
+    0,
+  );
 
-export default function List03({ items = ITEMS, className }: List03Props) {
+  // Sort by spending
+  const sortedCategories = [...categories].sort(
+    (a, b) => b.totalAmount - a.totalAmount,
+  );
+
   return (
-    <div className={cn("scrollbar-none w-full overflow-x-auto", className)}>
-      <div className="flex min-w-full gap-3 p-1">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className={cn(
-              "flex flex-col",
-              "w-[280px] shrink-0",
-              "bg-white dark:bg-zinc-900/70",
-              "rounded-xl",
-              "border border-zinc-100 dark:border-zinc-800",
-              "hover:border-zinc-200 dark:hover:border-zinc-700",
-              "transition-all duration-200",
-              "shadow-sm backdrop-blur-xl",
-            )}
-          >
-            <div className="space-y-3 p-4">
+    <div className={cn("w-full", className)}>
+      <div className="space-y-4">
+        {/* Summary Card */}
+        {categories.length > 0 && (
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            {/* Total Spending */}
+            <div
+              className={cn(
+                "rounded-xl p-6",
+                "bg-white dark:bg-zinc-900/70",
+                "border border-zinc-100 dark:border-zinc-800",
+                "shadow-sm backdrop-blur-xl",
+              )}
+            >
               <div className="flex items-start justify-between">
-                <div
-                  className={cn(
-                    "rounded-lg p-2",
-                    iconStyles[item.iconStyle as keyof typeof iconStyles],
-                  )}
-                >
-                  <item.icon className="h-4 w-4" />
+                <div>
+                  <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                    Total Across Categories
+                  </p>
+                  <h2 className="font-semibold text-2xl text-zinc-900 dark:text-zinc-50">
+                    {formatCurrency(totalSpending)}
+                  </h2>
+                  <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
+                    {categories.length} categories
+                  </p>
                 </div>
-                <div
-                  className={cn(
-                    "flex items-center gap-1.5 rounded-full px-2 py-1 font-medium text-xs",
-                    statusConfig[item.status].bg,
-                    statusConfig[item.status].class,
-                  )}
-                >
-                  {React.createElement(statusConfig[item.status].icon, {
-                    className: "w-3.5 h-3.5",
-                  })}
-                  {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="mb-1 font-medium text-sm text-zinc-900 dark:text-zinc-100">
-                  {item.title}
-                </h3>
-                <p className="line-clamp-2 text-xs text-zinc-600 dark:text-zinc-400">
-                  {item.subtitle}
-                </p>
-              </div>
-
-              {typeof item.progress === "number" && (
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-zinc-600 dark:text-zinc-400">
-                      Progress
-                    </span>
-                    <span className="text-zinc-900 dark:text-zinc-100">
-                      {item.progress}%
-                    </span>
-                  </div>
-                  <div className="h-1.5 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
-                    <div
-                      className="h-full rounded-full bg-zinc-900 dark:bg-zinc-100"
-                      style={{ width: `${item.progress}%` }}
-                    />
-                  </div>
-                </div>
-              )}
-
-              {item.amount && (
-                <div className="flex items-center gap-1.5">
-                  <span className="font-medium text-sm text-zinc-900 dark:text-zinc-100">
-                    {item.amount}
-                  </span>
-                  <span className="text-xs text-zinc-600 dark:text-zinc-400">
-                    target
-                  </span>
-                </div>
-              )}
-
-              <div className="flex items-center text-xs text-zinc-600 dark:text-zinc-400">
-                <Calendar className="mr-1.5 h-3.5 w-3.5" />
-                <span>{item.date}</span>
+                <TrendingDown className="h-5 w-5 text-red-600 dark:text-red-400" />
               </div>
             </div>
 
-            <div className="mt-auto border-zinc-100 border-t dark:border-zinc-800">
+            {/* Average Spending */}
+            <div
+              className={cn(
+                "rounded-xl p-6",
+                "bg-white dark:bg-zinc-900/70",
+                "border border-zinc-100 dark:border-zinc-800",
+                "shadow-sm backdrop-blur-xl",
+              )}
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                    Average Per Category
+                  </p>
+                  <h2 className="font-semibold text-2xl text-zinc-900 dark:text-zinc-50">
+                    {formatCurrency(
+                      categories.length > 0
+                        ? totalSpending / categories.length
+                        : 0,
+                    )}
+                  </h2>
+                  <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
+                    Across all categories
+                  </p>
+                </div>
+                <TrendingUp className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Categories List */}
+        <div
+          className={cn(
+            "rounded-xl",
+            "bg-white dark:bg-zinc-900/70",
+            "border border-zinc-100 dark:border-zinc-800",
+            "shadow-sm backdrop-blur-xl",
+          )}
+        >
+          <div className="p-6">
+            <h3 className="mb-4 font-semibold text-zinc-900 dark:text-zinc-100">
+              Category Breakdown
+            </h3>
+
+            {categories.length > 0 ? (
+              <div className="space-y-3">
+                {sortedCategories.map((category, index) => {
+                  const percentage =
+                    totalSpending > 0
+                      ? (category.totalAmount / totalSpending) * 100
+                      : 0;
+                  return (
+                    <div key={category.id} className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-800">
+                            <span className="font-semibold text-xs text-zinc-900 dark:text-zinc-100">
+                              {index + 1}
+                            </span>
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">
+                              {category.name}
+                            </h4>
+                            <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                              {category.transactionCount} transaction
+                              {category.transactionCount !== 1 ? "s" : ""}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">
+                            {formatCurrency(category.totalAmount)}
+                          </p>
+                          <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                            {percentage.toFixed(1)}%
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Progress Bar */}
+                      <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
+                          style={{ width: `${percentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="py-8 text-center">
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  No categories yet. Create one to track spending.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {categories.length > 0 && (
+            <div className="border-zinc-100 border-t p-3 dark:border-zinc-800">
               <button
                 type="button"
                 className={cn(
                   "flex w-full items-center justify-center gap-2",
-                  "px-3 py-2.5",
+                  "rounded-lg px-3 py-2.5",
                   "font-medium text-xs",
                   "text-zinc-600 dark:text-zinc-400",
                   "hover:text-zinc-900 dark:hover:text-zinc-100",
@@ -190,12 +175,12 @@ export default function List03({ items = ITEMS, className }: List03Props) {
                   "transition-colors duration-200",
                 )}
               >
-                View Details
+                View All Categories
                 <ArrowRight className="h-3.5 w-3.5" />
               </button>
             </div>
-          </div>
-        ))}
+          )}
+        </div>
       </div>
     </div>
   );
