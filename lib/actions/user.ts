@@ -103,3 +103,56 @@ export async function getUserBalance() {
     };
   }
 }
+
+export async function initializeUserDefaults(userId: string) {
+  try {
+    // Default categories
+    const defaultCategories = [
+      "Groceries",
+      "Utilities",
+      "Entertainment",
+      "Dining",
+      "Transportation",
+      "Salary",
+      "Investment",
+      "Other",
+    ];
+
+    // Create categories
+    const categories = await Promise.all(
+      defaultCategories.map((name) =>
+        prisma.category.create({
+          data: {
+            userId,
+            name,
+            type: "expense",
+          },
+        }),
+      ),
+    );
+
+    // Create default Savings account
+    const account = await prisma.bankAccount.create({
+      data: {
+        userId,
+        name: "Savings",
+        type: "savings",
+      },
+    });
+
+    return {
+      success: true,
+      message: "Default categories and account created successfully",
+      data: {
+        categories: categories.map((c) => ({ id: c.id, name: c.name })),
+        account: { id: account.id, name: account.name },
+      },
+    };
+  } catch (err) {
+    console.error("Error initializing user defaults:", err);
+    return {
+      success: false,
+      message: err instanceof Error ? err.message : "Something went wrong!",
+    };
+  }
+}

@@ -57,6 +57,7 @@ model Category {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String
   name      String
+  type      String   @default("expense") // expense, income
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { initializeUserDefaults } from "@/lib/actions/user";
 import { signIn, signUp } from "@/lib/auth-client";
 
 export default function SignUpPage() {
@@ -46,6 +47,10 @@ export default function SignUpPage() {
       if (result.error) {
         setError(result.error.message || "Sign up failed");
       } else {
+        // Initialize default categories and account for new user
+        if (result.data?.user?.id) {
+          await initializeUserDefaults(result.data.user.id);
+        }
         router.push("/dashboard");
         router.refresh();
       }
