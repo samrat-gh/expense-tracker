@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import Logout from "./logout";
 
 interface MenuItem {
   label: string;
@@ -23,20 +24,12 @@ interface Profile01Props {
   subscription?: string;
 }
 
-const defaultProfile = {
-  name: "Eugene An",
-  role: "Prompt Engineer",
-  avatar:
-    "https://ferf1mheo22r9ira.public.blob.vercel-storage.com/avatar-02-albo9B0tWOSLXCVZh9rX9KFxXIVWMr.png",
-  subscription: "Free Trial",
-} satisfies Required<Profile01Props>;
-
 export default function Profile01({
-  name = defaultProfile.name,
-  role = defaultProfile.role,
-  avatar = defaultProfile.avatar,
-  subscription = defaultProfile.subscription,
-}: Partial<Profile01Props> = defaultProfile) {
+  name,
+  role = "User",
+  avatar = "/images/default-avatar.png",
+  subscription = "Free",
+}: Partial<Profile01Props> = {}) {
   const menuItems: MenuItem[] = [
     {
       label: "Subscription",
@@ -50,23 +43,23 @@ export default function Profile01({
       href: "#",
       icon: <Settings className="h-4 w-4" />,
     },
-    {
-      label: "Terms & Policies",
-      href: "#",
-      icon: <FileText className="h-4 w-4" />,
-      external: true,
-    },
+    // {
+    //   label: "Terms & Policies",
+    //   href: "#",
+    //   icon: <FileText className="h-4 w-4" />,
+    //   external: true,
+    // },
   ];
 
   return (
-    <div className="mx-auto w-full max-w-sm">
+    <div className="mx-auto w-full max-w-sm dark:bg-neutral-800">
       <div className="relative overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800">
         <div className="relative px-6 pt-12 pb-6">
           <div className="mb-8 flex items-center gap-4">
             <div className="relative shrink-0">
               <Image
                 src={avatar}
-                alt={name}
+                alt={name ?? "User Avatar"}
                 width={72}
                 height={72}
                 className="rounded-full object-cover ring-4 ring-white dark:ring-zinc-900"
@@ -107,17 +100,7 @@ export default function Profile01({
               </Link>
             ))}
 
-            <button
-              type="button"
-              className="flex w-full items-center justify-between rounded-lg p-2 transition-colors duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
-            >
-              <div className="flex items-center gap-2">
-                <LogOut className="h-4 w-4" />
-                <span className="font-medium text-sm text-zinc-900 dark:text-zinc-100">
-                  Logout
-                </span>
-              </div>
-            </button>
+            <Logout />
           </div>
         </div>
       </div>

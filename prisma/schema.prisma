@@ -8,18 +8,20 @@ datasource db {
 }
 
 model User {
-  id        String   @id @map("_id")
-  name      String?
-  email     String   @unique
-  image     String?
-  currency  String   @default("NRS")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @map("_id")
+  name          String?
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  currency      String   @default("NRS")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  accounts     BankAccount[]
-  transactions Transaction[]
-  categories   Category[]
-  sessions     Session[]
+  transactions  Transaction[]
+  sessions      Session[]
+  oauthAccounts Account[]
+  userAccounts  UserAccount[]
+  categories    Category[]
 
   @@map("users")
 }
@@ -38,7 +40,41 @@ model Session {
   @@map("sessions")
 }
 
-model BankAccount {
+model Account {
+  id                    String    @id @map("_id")
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([providerId])
+  @@map("accounts")
+}
+
+model Verification {
+  id         String   @id @map("_id")
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([identifier, value])
+  @@map("verifications")
+}
+
+model UserAccount {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String
   name      String
@@ -50,7 +86,7 @@ model BankAccount {
   transactions Transaction[]
 
   @@index([userId])
-  @@map("bank_accounts")
+  @@map("user_accounts")
 }
 
 model Category {
@@ -69,20 +105,20 @@ model Category {
 }
 
 model Transaction {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String
-  accountId   String
-  categoryId  String
-  amount      Int
-  type        String // Debit, Credit
-  method      String // Cash, Online
-  remarks     String?
-  date        DateTime @default(now())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String
+  accountId  String   @db.ObjectId
+  categoryId String   @db.ObjectId
+  amount     Int
+  type       String // Debit, Credit
+  method     String // Cash, Online
+  remarks    String?
+  date       DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  account  BankAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  account  UserAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
   category Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@index([userId])

@@ -72,12 +72,11 @@ export default function TopNav() {
               className="cursor-pointer rounded-full ring-2 ring-gray-200 sm:h-8 sm:w-8 dark:ring-[#2B2B30]"
             />
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            sideOffset={8}
-            className="w-[280px] rounded-lg border-border bg-background shadow-lg sm:w-80"
-          >
-            <Profile01 avatar="https://ferf1mheo22r9ira.public.blob.vercel-storage.com/avatar-01-n0x8HFv8EUetf9z6ht0wScJKoTHqf8.png" />
+          <DropdownMenuContent align="end" className="border-none">
+            <Profile01
+              avatar={user?.image || "/default-avatar.png"}
+              name={user?.name || "User Name"}
+            />
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

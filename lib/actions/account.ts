@@ -15,7 +15,7 @@ export async function getAccounts() {
       };
     }
 
-    const accounts = await prisma.bankAccount.findMany({
+    const accounts = await prisma.userAccount.findMany({
       where: { userId: session.user.id },
       include: {
         transactions: {

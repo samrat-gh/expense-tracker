@@ -106,6 +106,27 @@ export async function getUserBalance() {
 
 export async function initializeUserDefaults(userId: string) {
   try {
+    // Check if user already has defaults
+    const existingCategories = await prisma.category.findFirst({
+      where: { userId },
+    });
+
+    const existingAccount = await prisma.userAccount.findFirst({
+      where: { userId },
+    });
+
+    // If user already has categories and account, don't create again
+    if (existingCategories && existingAccount) {
+      return {
+        success: true,
+        message: "User already has default categories and account",
+        data: {
+          categories: [],
+          account: { id: existingAccount.id, name: existingAccount.name },
+        },
+      };
+    }
+
     // Default categories
     const defaultCategories = [
       "Groceries",
@@ -118,31 +139,35 @@ export async function initializeUserDefaults(userId: string) {
       "Other",
     ];
 
-    // Create categories
-    const categories = await Promise.all(
-      defaultCategories.map((name) =>
-        prisma.category.create({
+    // Create categories only if they don't exist
+    const categories = !existingCategories
+      ? await Promise.all(
+          defaultCategories.map((name) =>
+            prisma.category.create({
+              data: {
+                userId,
+                name,
+                type: "expense",
+              },
+            }),
+          ),
+        )
+      : [];
+
+    // Create default Savings account only if it doesn't exist
+    const account = existingAccount
+      ? existingAccount
+      : await prisma.userAccount.create({
           data: {
             userId,
-            name,
-            type: "expense",
+            name: "Savings",
+            type: "savings",
           },
-        }),
-      ),
-    );
-
-    // Create default Savings account
-    const account = await prisma.bankAccount.create({
-      data: {
-        userId,
-        name: "Savings",
-        type: "savings",
-      },
-    });
+        });
 
     return {
       success: true,
-      message: "Default categories and account created successfully",
+      message: "Default categories and account initialized successfully",
       data: {
         categories: categories.map((c) => ({ id: c.id, name: c.name })),
         account: { id: account.id, name: account.name },
