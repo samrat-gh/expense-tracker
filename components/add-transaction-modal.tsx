@@ -1,6 +1,8 @@
 "use client";
 
+import type React from "react";
 import { useCallback, useEffect, useId, useState } from "react";
+import { toast } from "sonner";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,13 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { createTransaction } from "@/lib/actions/transaction";
 
 interface BankAccount {
@@ -112,7 +107,7 @@ export default function AddTransactionModal({
     e.preventDefault();
 
     if (!formData.accountId || !formData.categoryId || !formData.amount) {
-      alert("Please fill in all required fields");
+      toast.warning("Please fill in all required fields");
       return;
     }
 
@@ -141,25 +136,24 @@ export default function AddTransactionModal({
         });
         onOpenChange(false);
         // Optionally show success message
-        alert("Transaction added successfully!");
+        toast.success("Transaction added successfully!");
       } else {
-        alert(result.message || "Failed to create transaction");
+        toast.error(result.message || "Failed to create transaction");
       }
     } catch (error) {
       console.error("Error creating transaction:", error);
-      alert("An error occurred while creating the transaction");
+      toast.error("An error occurred while creating the transaction");
     } finally {
       setLoading(false);
     }
   };
-
+  console.log("accounts", accounts);
+  console.log("categories", categories);
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full max-w-md rounded-xl border border-gray-200 bg-white p-6 dark:border-[#1F1F23] dark:bg-[#0F0F12]">
+      <DialogContent className="w-full max-w-sm bg-neutral-800">
         <DialogHeader>
-          <DialogTitle className="font-bold text-gray-900 text-xl dark:text-white">
-            Add Transaction
-          </DialogTitle>
+          <DialogTitle>Add Transaction</DialogTitle>
         </DialogHeader>
 
         {fetching ? (
@@ -167,133 +161,115 @@ export default function AddTransactionModal({
             <LoadingSpinner />
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Amount */}
             <div className="space-y-2">
-              <Label htmlFor={amountId} className="font-medium text-sm">
-                Amount
-              </Label>
+              <Label htmlFor={amountId}>Amount</Label>
               <Input
                 id={amountId}
                 name="amount"
                 type="number"
-                step="0.01"
                 placeholder="0.00"
                 value={formData.amount}
                 onChange={handleInputChange}
                 required
-                className="bg-gray-50 dark:bg-input/50"
               />
             </div>
 
             {/* Account */}
             <div className="space-y-2">
-              <Label htmlFor={accountId} className="font-medium text-sm">
-                Account
-              </Label>
-              <Select
+              <label htmlFor={accountId}>Account</label>
+              <select
+                id={accountId}
+                name="accountId"
                 value={formData.accountId}
-                onValueChange={(value) =>
-                  handleSelectChange("accountId", value)
+                onChange={(e) =>
+                  handleSelectChange("accountId", e.target.value)
                 }
+                className="w-full rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+                required
               >
-                <SelectTrigger className="bg-gray-50 dark:bg-input/50">
-                  <SelectValue placeholder="Select account" />
-                </SelectTrigger>
-                <SelectContent>
-                  {accounts.map((account) => (
-                    <SelectItem
-                      key={account.id}
-                      value={account.id}
-                      className="text-white"
-                    >
-                      {account.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <option value="" disabled>
+                  Select account
+                </option>
+                {accounts.map((acc) => (
+                  <option key={acc.id} value={acc.id}>
+                    {acc.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Category */}
             <div className="space-y-2">
-              <Label htmlFor={categoryId} className="font-medium text-sm">
-                Category
-              </Label>
-              <Select
+              <label htmlFor={categoryId}>Category</label>
+              <select
+                id={categoryId}
+                name="categoryId"
                 value={formData.categoryId}
-                onValueChange={(value) =>
-                  handleSelectChange("categoryId", value)
+                onChange={(e) =>
+                  handleSelectChange("categoryId", e.target.value)
                 }
+                className="w-full rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+                required
               >
-                <SelectTrigger className="bg-gray-50 dark:bg-input/50">
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <option value="" disabled>
+                  Select category
+                </option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Type */}
             <div className="space-y-2">
-              <Label htmlFor={typeId} className="font-medium text-sm">
-                Type
-              </Label>
-              <Select
+              <label htmlFor={typeId}>Type</label>
+              <select
+                id={typeId}
+                name="type"
                 value={formData.type}
-                onValueChange={(value) => handleSelectChange("type", value)}
+                onChange={(e) => handleSelectChange("type", e.target.value)}
+                className="w-full rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
               >
-                <SelectTrigger className="bg-gray-50 dark:bg-input/50 dark:text-white">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Debit">Debit (Expense)</SelectItem>
-                  <SelectItem value="Credit">Credit (Income)</SelectItem>
-                </SelectContent>
-              </Select>
+                <option value="Credit">Credit (Income)</option>
+                <option value="Debit">Debit (Expense)</option>
+              </select>
             </div>
 
             {/* Method */}
             <div className="space-y-2">
-              <Label htmlFor={methodId} className="font-medium text-sm">
-                Method
-              </Label>
-              <Select
+              <label htmlFor={methodId}>Method</label>
+              <select
+                id={methodId}
+                name="method"
                 value={formData.method}
-                onValueChange={(value) => handleSelectChange("method", value)}
+                onChange={(e) => handleSelectChange("method", e.target.value)}
+                className="w-full rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
               >
-                <SelectTrigger className="bg-gray-50 dark:bg-input/50">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Online">Online</SelectItem>
-                  <SelectItem value="Cash">Cash</SelectItem>
-                </SelectContent>
-              </Select>
+                <option value="Online">Online</option>
+                <option value="Cash">Cash</option>
+              </select>
             </div>
 
             {/* Remarks */}
             <div className="space-y-2">
-              <Label htmlFor={remarksId} className="font-medium text-sm">
-                Remarks (Optional)
-              </Label>
+              <Label htmlFor={remarksId}>Remarks (Optional)</Label>
               <textarea
                 id={remarksId}
                 name="remarks"
                 placeholder="Add notes..."
                 value={formData.remarks}
                 onChange={handleInputChange}
-                className="w-full rounded-md border border-input bg-gray-50 px-3 py-2 text-sm placeholder:text-muted-foreground focus:border-ring focus:ring-[3px] focus:ring-ring/50 dark:border-[#1F1F23] dark:bg-input/50"
+                className="w-full rounded-md border border-input px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
                 rows={3}
               />
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-3 pt-4">
+            <div className="flex gap-3 pt-2">
               <Button
                 type="button"
                 variant="outline"
@@ -306,7 +282,7 @@ export default function AddTransactionModal({
               <Button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-linear-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700"
+                className="flex-1 cursor-pointer bg-purple-600 hover:bg-purple-700"
               >
                 {loading ? "Adding..." : "Add Transaction"}
               </Button>

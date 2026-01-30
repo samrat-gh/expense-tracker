@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { productConfig } from "@/data/config";
 
 export const metadata: Metadata = {
@@ -55,6 +56,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <Toaster />
             {children}
           </ThemeProvider>
         </body>

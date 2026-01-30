@@ -32,7 +32,7 @@ export async function createTransaction(
 
     // Verify account and category belong to user
     const [account, category] = await Promise.all([
-      prisma.bankAccount.findFirst({
+      prisma.userAccount.findFirst({
         where: { id: accountId, userId },
       }),
       prisma.category.findFirst({
@@ -41,6 +41,7 @@ export async function createTransaction(
     ]);
 
     if (!account || !category) {
+      console.log(account, category);
       return {
         success: false,
         message: "Account or category not found",
