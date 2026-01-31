@@ -46,21 +46,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <PatternGradient>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body className="antialiased">
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Toaster />
-            {children}
-          </ThemeProvider>
-        </body>
-      </html>
-    </PatternGradient>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body className="antialiased">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Toaster />
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

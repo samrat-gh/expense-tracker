@@ -2,13 +2,12 @@
 
 import {
   ArrowRight,
-  BarChart3,
+  CheckCircle2,
   Globe,
   LineChart,
   PieChart,
   Shield,
   Sparkles,
-  TrendingUp,
   Wallet,
   Zap,
 } from "lucide-react";
@@ -19,7 +18,6 @@ import Login from "@/components/login";
 import Navbar from "@/components/nav";
 
 export default function Home() {
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -27,98 +25,270 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen overflow-hidden bg-background text-foreground">
+    <div className="min-h-screen bg-gradient-to-b from-background to-background/95 font-sans text-foreground selection:bg-primary/30 selection:text-primary-foreground">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden px-4 pt-24 pb-20 sm:px-6 sm:pt-32 lg:px-8">
-        <div className="mx-auto max-w-6xl">
+      {/* --- HERO SECTION --- */}
+      <section className="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-24">
+        {/* Spotlight Effect Background */}
+        <div className="inset-0 h-full w-full overflow-hidden bg-background/95 bg-grid-foreground/[0.02] antialiased">
+          <div className="pointer-events-none absolute top-0 left-0 z-0 h-[85vh] w-screen animate-spotlight opacity-0 transition-opacity duration-1000 md:left-60">
+            <div className="h-full w-full bg-gradient-to-r from-primary/20 to-blue-900/40 blur-[100px]" />
+          </div>
+        </div>
+
+        <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-4 text-center sm:px-6 lg:px-8">
+          {/* Badge */}
           <div
-            className={`mb-8 flex justify-center transition-all duration-700 ${
-              mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-            }`}
+            className={`transition-all delay-100 duration-700 ${mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
           >
-            <div className="inline-flex cursor-default items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 font-medium text-sm transition-colors hover:bg-primary/15">
-              <Sparkles className="h-4 w-4 text-primary" />
-              <span className="text-primary">
-                Built for freelancers & creators
-              </span>
-            </div>
+            <span className="group inline-flex cursor-pointer items-center gap-2 rounded-full border border-border/50 bg-accent/50 px-3 py-1 font-medium text-foreground/80 text-xs backdrop-blur-xl transition-colors hover:bg-accent">
+              <Sparkles className="h-3.5 w-3.5 text-primary transition-colors group-hover:text-primary/80" />
+              <span>Next-Gen Financial Intelligence</span>
+            </span>
           </div>
 
           {/* Heading */}
-          <div
-            className={`mb-8 text-center transition-all delay-100 duration-700 ${
-              mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-            }`}
+          <h1
+            className={`mt-8 mb-6 max-w-4xl font-bold text-5xl text-foreground tracking-tight transition-all delay-200 duration-700 md:text-7xl ${mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
           >
-            <h1 className="mb-6 text-balance font-bold text-5xl leading-[1.1] tracking-tight sm:text-6xl lg:text-7xl">
-              <span className="mb-2 block">Know Exactly Where</span>
-              <span className="gradient-text">Your Money Goes</span>
-            </h1>
+            Master Your Money <br />
+            <span className="text-gradient-primary">With Precision</span>
+          </h1>
 
-            {/* Subheading */}
-            <p className="mx-auto mb-12 max-w-3xl text-balance text-lg text-muted-foreground leading-relaxed sm:text-xl lg:text-2xl">
-              Stop the guesswork. Track every dollar in seconds, visualize your
-              cash flow instantly, and make smarter financial decisions—no
-              spreadsheets required.
-            </p>
-          </div>
+          <p
+            className={`mb-10 max-w-2xl text-lg text-muted-foreground transition-all delay-300 duration-700 md:text-xl ${mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
+          >
+            Stop guessing. Start knowing. The first expense tracker designed for
+            the digital economy—real-time, offline-capable, private by default.
+          </p>
 
           {/* CTA Buttons */}
           <div
-            className={`mb-16 flex flex-col justify-center gap-4 transition-all delay-200 duration-700 sm:mb-20 sm:flex-row ${
-              mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-            }`}
+            className={`flex w-full flex-col gap-4 transition-all delay-400 duration-700 sm:w-auto sm:flex-row ${mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
           >
             <Link
               href="/dashboard"
-              className="group hover:-translate-y-0.5 rounded-xl bg-purple-50 px-8 py-3 font-semibold text-base shadow-primary/25 shadow-xl transition-all duration-300 hover:bg-white hover:shadow-2xl hover:shadow-primary/30 dark:text-black dark:hover:text-purple-900"
+              className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-primary px-8 font-medium text-primary-foreground shadow-lg transition-all duration-300 hover:scale-105 hover:bg-primary/90"
             >
-              Start Tracking
-              <ArrowRight className="ml-2 inline h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <span className="mr-2">Start Tracking Free</span>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
+
+            <a
+              href="#features"
+              className="inline-flex h-12 items-center justify-center rounded-full border border-border bg-accent/50 px-8 font-medium text-foreground backdrop-blur-sm transition-all hover:bg-accent"
+            >
+              How it Works
+            </a>
           </div>
 
-          {/* Hero Image */}
+          {/* Floating Dashboard Interface */}
           <div
-            className={`relative transition-all delay-300 duration-1000 ${
-              mounted ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-            }`}
+            className={`perspective-1000 relative mx-auto mt-20 w-full max-w-5xl transition-all delay-500 duration-1000 ${mounted ? "translate-y-0 rotate-x-12 opacity-100" : "translate-y-12 opacity-0"}`}
           >
-            <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-background via-transparent to-transparent"></div>
-            <div className="relative overflow-hidden rounded-2xl border border-border/50 shadow-2xl shadow-black/10 dark:shadow-black/30">
-              <div className="relative flex aspect-[16/9] items-center justify-center overflow-hidden bg-gradient-to-br from-card via-muted/30 to-card">
-                {/* Mock dashboard UI */}
-                <div className="absolute inset-4 overflow-hidden rounded-xl border border-border/50 bg-card/80 backdrop-blur-sm sm:inset-8">
-                  {/* Mock header */}
-                  <div className="flex h-12 items-center gap-3 border-border/50 border-b px-4 sm:h-14">
-                    <div className="flex gap-1.5">
-                      <div className="h-3 w-3 rounded-full bg-destructive/60"></div>
-                      <div className="h-3 w-3 rounded-full bg-yellow-500/60"></div>
-                      <div className="h-3 w-3 rounded-full bg-green-500/60"></div>
-                    </div>
-                    <div className="flex flex-1 justify-center">
-                      <div className="h-6 w-48 rounded-md bg-muted/50"></div>
+            <div className="group relative aspect-[16/10] animate-float-delayed overflow-hidden rounded-xl border border-border/50 bg-card/50 shadow-2xl ring-1 ring-border/20 backdrop-blur-md md:aspect-[21/9]">
+              {/* Header */}
+              <div className="flex h-10 items-center gap-2 border-border/50 border-b bg-accent/30 px-4">
+                <div className="flex gap-1.5">
+                  <div className="h-3 w-3 rounded-full border border-red-500/50 bg-red-500/20" />
+                  <div className="h-3 w-3 rounded-full border border-yellow-500/50 bg-yellow-500/20" />
+                  <div className="h-3 w-3 rounded-full border border-green-500/50 bg-green-500/20" />
+                </div>
+                <div className="flex-1 text-center">
+                  <div className="inline-block h-5 w-48 rounded bg-accent/50" />
+                </div>
+              </div>
+
+              {/* Grid content */}
+              <div className="grid h-full grid-cols-12 gap-6 p-6">
+                {/* Sidebar Mock */}
+                <div className="col-span-2 hidden space-y-4 md:block">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className="h-8 w-full animate-pulse rounded bg-accent/50"
+                      style={{ animationDelay: `${i * 200}ms` }}
+                    />
+                  ))}
+                </div>
+
+                {/* Main Content */}
+                <div className="col-span-12 grid grid-cols-1 gap-6 md:col-span-10 md:grid-cols-3">
+                  {/* Chart Card */}
+                  <div className="relative col-span-2 overflow-hidden rounded-lg border border-border/30 bg-card/30 p-4 transition-colors group-hover:border-primary/20">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                    <div className="mb-4 h-6 w-32 rounded bg-accent/70" />
+                    <div className="flex h-32 items-end justify-between gap-2">
+                      {[40, 70, 45, 90, 60, 80, 50, 85].map((h, i) => (
+                        <div
+                          key={`idd-${i + 1}`}
+                          className="w-full rounded-t-sm bg-primary/40 transition-colors duration-300 hover:bg-primary"
+                          style={{ height: `${h}%` }}
+                        />
+                      ))}
                     </div>
                   </div>
-                  {/* Mock content */}
-                  <div className="grid grid-cols-3 gap-4 p-4 sm:p-6">
-                    <div className="col-span-2 space-y-4">
-                      <div className="flex h-32 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 sm:h-40">
-                        <BarChart3 className="h-12 w-12 text-primary/40 sm:h-16 sm:w-16" />
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="h-20 rounded-lg bg-muted/30"></div>
-                        <div className="h-20 rounded-lg bg-muted/30"></div>
-                      </div>
+
+                  {/* Summary Card */}
+                  <div className="space-y-4 rounded-lg border border-border/30 bg-card/30 p-4">
+                    <div className="flex h-20 items-center justify-center rounded border border-green-500/10 bg-gradient-to-br from-green-500/10 to-green-500/5">
+                      <span className="font-mono text-2xl text-green-400">
+                        +$2,450.00
+                      </span>
                     </div>
-                    <div className="space-y-4">
-                      <div className="h-24 rounded-lg bg-muted/30"></div>
-                      <div className="h-24 rounded-lg bg-muted/30"></div>
-                      <div className="h-24 rounded-lg bg-muted/30"></div>
+                    <div className="flex h-20 items-center justify-center rounded border border-red-500/10 bg-gradient-to-br from-red-500/10 to-red-500/5">
+                      <span className="font-mono text-2xl text-red-400">
+                        -$1,280.00
+                      </span>
                     </div>
                   </div>
+
+                  {/* Transaction List */}
+                  <div className="col-span-3 flex h-24 flex-col gap-3 rounded-lg border border-border/30 bg-card/30 p-4">
+                    {[1, 2].map((i) => (
+                      <div
+                        key={i}
+                        className="flex items-center justify-between"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="h-8 w-8 rounded-full bg-accent/70" />
+                          <div className="h-4 w-32 rounded bg-accent/50" />
+                        </div>
+                        <div className="h-4 w-16 rounded bg-accent/50" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Background glow base */}
+        <div className="-translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none absolute top-1/2 left-1/2 h-[400px] w-[800px] rounded-full bg-primary/20 blur-[120px]" />
+      </section>
+
+      {/* --- STATS TICKER --- */}
+      <div className="w-full overflow-hidden border-border/20 border-y bg-accent/30 py-6 backdrop-blur-sm">
+        <div className="flex w-[200%] animate-scroll items-center justify-around gap-10 whitespace-nowrap md:w-full">
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <Shield className="h-5 w-5 text-primary" />
+            <span className="font-mono text-sm uppercase tracking-wider">
+              Bank-Grade Encryption
+            </span>
+          </div>
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <Globe className="h-5 w-5 text-purple-400" />
+            <span className="font-mono text-sm uppercase tracking-wider">
+              Offline First Architecture
+            </span>
+          </div>
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <Zap className="h-5 w-5 text-yellow-400" />
+            <span className="font-mono text-sm uppercase tracking-wider">
+              Real-time Sync
+            </span>
+          </div>
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <CheckCircle2 className="h-5 w-5 text-green-400" />
+            <span className="font-mono text-sm uppercase tracking-wider">
+              No Hidden Fees
+            </span>
+          </div>
+
+          {/* Duplicate for seamless loop effect on smaller screens (concept only, requires marquee CSS) */}
+          <div className="hidden items-center gap-3 text-muted-foreground md:flex">
+            <Shield className="h-5 w-5 text-primary" />
+            <span className="font-mono text-sm uppercase tracking-wider">
+              Bank-Grade Encryption
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* --- BENTO FEATURES --- */}
+      <section id="features" className="relative py-24 sm:py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto mb-20 max-w-3xl text-center">
+            <h2 className="mb-6 font-bold text-3xl md:text-5xl">
+              Powered by{" "}
+              <span className="text-gradient-primary">Intelligence</span>
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Every feature you need to control your wealth, reimagined for the
+              modern era.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {/* Large Card Left */}
+            <div className="glass-card group relative overflow-hidden rounded-3xl p-8 md:col-span-2">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="relative z-10 flex h-full flex-col items-start justify-between">
+                <div className="mb-6 rounded-xl border border-border/50 bg-accent/50 p-3 transition-colors group-hover:bg-primary/20">
+                  <LineChart className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="mb-2 font-bold text-2xl">
+                    Predictive Analytics
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Our AI analyzes your spending habits to forecast future cash
+                    flow. Know you're safe before you spend.
+                  </p>
+                </div>
+              </div>
+              <div className="absolute top-20 right-0 opacity-20 transition-opacity group-hover:opacity-40">
+                <div className="h-64 w-64 rounded-full border-[20px] border-primary/20 blur-2xl" />
+              </div>
+            </div>
+
+            {/* Small Card Right Top */}
+            <div className="glass-card group relative overflow-hidden rounded-3xl p-8">
+              <div className="relative z-10">
+                <div className="mb-6 w-fit rounded-xl border border-border/50 bg-accent/50 p-3 transition-colors group-hover:bg-purple-500/20">
+                  <Zap className="h-6 w-6 text-purple-400" />
+                </div>
+                <h3 className="mb-2 font-bold text-xl">Instant Capture</h3>
+                <p className="text-muted-foreground text-sm">
+                  Log transactions in under 3 seconds. Shortcuts, voice, or
+                  widgets.
+                </p>
+              </div>
+            </div>
+
+            {/* Small Card Left Bottom */}
+            <div className="glass-card group relative overflow-hidden rounded-3xl p-8">
+              <div className="relative z-10">
+                <div className="mb-6 w-fit rounded-xl border border-border/50 bg-accent/50 p-3 transition-colors group-hover:bg-green-500/20">
+                  <PieChart className="h-6 w-6 text-green-400" />
+                </div>
+                <h3 className="mb-2 font-bold text-xl">Smart Categories</h3>
+                <p className="text-muted-foreground text-sm">
+                  Auto-categorization that actually works. 99% accuracy rate.
+                </p>
+              </div>
+            </div>
+
+            {/* Large Card Right Bottom */}
+            <div className="glass-card group relative overflow-hidden rounded-3xl p-8 md:col-span-2">
+              <div className="relative z-10 flex flex-col items-center gap-8 md:flex-row">
+                <div className="flex-1">
+                  <div className="mb-6 w-fit rounded-xl border border-border/50 bg-accent/50 p-3 transition-colors group-hover:bg-blue-500/20">
+                    <Wallet className="h-6 w-6 text-blue-400" />
+                  </div>
+                  <h3 className="mb-2 font-bold text-2xl">
+                    Multi-Currency Global Wallets
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Track unlimited accounts across 150+ currencies. Perfect for
+                    digital nomads and global citizens. Real-time conversion
+                    rates applied automatically.
+                  </p>
+                </div>
+                <div className="relative flex aspect-square w-full animate-pulse items-center justify-center rounded-full border border-border/50 bg-accent/30 md:w-1/3">
+                  <Globe className="h-16 w-16 text-muted-foreground/30" />
                 </div>
               </div>
             </div>
@@ -126,411 +296,125 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="border-border/50 border-y bg-muted/30 px-4 py-20 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
+      {/* --- TESTIMONIALS (Glass Shards) --- */}
+      <section className="relative overflow-hidden py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-16 text-center font-bold text-3xl">
+            Community <span className="text-gradient-primary">Trust</span>
+          </h2>
+
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {[
-              { number: "50K+", label: "Active Users", icon: "👥" },
-              { number: "$2.3B", label: "Money Tracked", icon: "💰" },
-              { number: "10M+", label: "Transactions", icon: "📊" },
-              { number: "99.9%", label: "Uptime", icon: "⚡" },
-            ].map((stat) => (
+              {
+                text: "The first finance app that doesn't feel like a spreadsheet. It actually makes me want to track my money. The design is impeccable.",
+                author: "Alex V.",
+                role: "Product Designer",
+                avatar: "A",
+              },
+              {
+                text: "Offline mode is a lifesaver. I travel constantly and need something that works on the plane, the subway, or in remote areas.",
+                author: "Sarah K.",
+                role: "Digital Nomad",
+                avatar: "S",
+              },
+              {
+                text: "Privacy focused, fast, and beautiful. Finally, an app that respects my data and looks good doing it.",
+                author: "James R.",
+                role: "Security Engineer",
+                avatar: "J",
+              },
+            ].map((t, i) => (
               <div
-                key={stat.label}
-                className="group cursor-default text-center"
+                key={`feat-${i + 1}`}
+                className="glass-panel hover:-translate-y-2 relative rounded-2xl p-6 transition-transform duration-300"
               >
-                <div className="mb-2 text-2xl">{stat.icon}</div>
-                <p className="mb-2 font-bold text-3xl text-foreground transition-colors group-hover:text-primary sm:text-4xl lg:text-5xl">
-                  {stat.number}
-                </p>
-                <p className="font-medium text-muted-foreground text-sm sm:text-base">
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid Section */}
-      <section className="px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-16 text-center">
-            <span className="mb-4 inline-block rounded-full bg-primary/10 px-3 py-1 font-medium text-primary text-sm">
-              Features
-            </span>
-            <h2 className="mb-6 text-balance font-bold text-4xl sm:text-5xl">
-              Everything You Need to
-              <span className="gradient-text"> Master Your Money</span>
-            </h2>
-            <p className="mx-auto max-w-2xl text-lg text-muted-foreground sm:text-xl">
-              Powerful tools designed for real life, not spreadsheet experts
-            </p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2">
-            {[
-              {
-                icon: Zap,
-                title: "Lightning Fast Logging",
-                description:
-                  "Log income and expenses in under 3 seconds. No forms, no friction, just pure speed.",
-                highlight: "3 seconds",
-                gradient: "from-yellow-500 to-orange-500",
-              },
-              {
-                icon: PieChart,
-                title: "Smart Categories",
-                description:
-                  "AI-powered suggestions learn from your patterns and categorize automatically.",
-                highlight: "AI-Powered",
-                gradient: "from-blue-500 to-cyan-500",
-              },
-              {
-                icon: LineChart,
-                title: "Real-Time Insights",
-                description:
-                  "See your cash flow patterns instantly. Visual charts that actually tell you something useful.",
-                highlight: "Live Data",
-                gradient: "from-green-500 to-emerald-500",
-              },
-              {
-                icon: Wallet,
-                title: "Flexible Budgeting",
-                description:
-                  "Built for variable income. No rigid budgets, just clear tracking and smart insights.",
-                highlight: "Adaptive",
-                gradient: "from-purple-500 to-pink-500",
-              },
-            ].map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <div
-                  key={feature.title}
-                  className="group relative cursor-pointer overflow-hidden rounded-2xl border border-border/50 bg-card p-8 transition-all duration-500 hover:border-primary/30 hover:shadow-primary/5 hover:shadow-xl"
-                  onMouseEnter={() => setHoveredCard(index)}
-                  onMouseLeave={() => setHoveredCard(null)}
-                >
-                  {/* Hover gradient background */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-[0.03]`}
-                  ></div>
-
-                  <div className="relative flex items-start gap-5">
-                    <div
-                      className={`h-14 w-14 rounded-xl bg-gradient-to-br ${feature.gradient} flex flex-shrink-0 items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110`}
-                    >
-                      <Icon className="h-7 w-7 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="mb-2 font-bold text-xl transition-colors group-hover:text-primary sm:text-2xl">
-                        {feature.title}
-                      </h3>
-                      <p className="mb-4 text-muted-foreground leading-relaxed">
-                        {feature.description}
-                      </p>
-                      <span
-                        className={`inline-block rounded-full bg-gradient-to-r px-3 py-1.5 font-semibold text-xs ${feature.gradient} text-white shadow-sm`}
-                      >
-                        {feature.highlight}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="bg-muted/30 px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-16 text-center">
-            <span className="mb-4 inline-block rounded-full bg-primary/10 px-3 py-1 font-medium text-primary text-sm">
-              How It Works
-            </span>
-            <h2 className="mb-6 font-bold text-4xl sm:text-5xl">
-              Three Steps to <span className="gradient-text">Clarity</span>
-            </h2>
-            <p className="text-lg text-muted-foreground sm:text-xl">
-              From chaos to control in minutes, not hours
-            </p>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-3">
-            {[
-              {
-                step: "1",
-                title: "Log Your Transactions",
-                description:
-                  "Record income and expenses instantly. Works anywhere, anytime, even offline.",
-                icon: "✏️",
-              },
-              {
-                step: "2",
-                title: "Watch Patterns Emerge",
-                description:
-                  "Our smart system organizes everything and reveals your spending habits automatically.",
-                icon: "📈",
-              },
-              {
-                step: "3",
-                title: "Make Smarter Decisions",
-                description:
-                  "See the full picture and take control with confidence. No finance degree needed.",
-                icon: "🎯",
-              },
-            ].map((item, index) => (
-              <div key={item.step} className="group relative">
-                {/* Connector line */}
-                {index < 2 && (
-                  <div className="-right-4 absolute top-16 z-10 hidden h-0.5 w-8 bg-gradient-to-r from-primary/50 to-transparent md:block"></div>
-                )}
-
-                <div className="relative h-full rounded-2xl border border-border/50 bg-card p-8 transition-all duration-500 hover:border-primary/30 hover:shadow-primary/5 hover:shadow-xl">
-                  {/* Step number badge */}
-                  <div className="-top-4 absolute left-8 inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent font-bold text-sm text-white shadow-lg">
-                    {item.step}
-                  </div>
-
-                  <div className="pt-4">
-                    <span className="mb-4 block text-4xl">{item.icon}</span>
-                    <h3 className="mb-3 font-bold text-xl transition-colors group-hover:text-primary sm:text-2xl">
-                      {item.title}
-                    </h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {item.description}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Checklist */}
-      <section className="px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
-        <div className="mx-auto max-w-5xl">
-          <div className="mb-16 text-center">
-            <span className="mb-4 inline-block rounded-full bg-primary/10 px-3 py-1 font-medium text-primary text-sm">
-              All-In-One
-            </span>
-            <h2 className="mb-6 text-balance font-bold text-4xl sm:text-5xl">
-              Packed with <span className="gradient-text">Everything</span>
-            </h2>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { text: "Instant transaction logging", icon: Zap },
-              { text: "Smart expense categorization", icon: PieChart },
-              { text: "Beautiful dashboards", icon: BarChart3 },
-              { text: "Real-time cash flow charts", icon: LineChart },
-              { text: "Flexible budget insights", icon: Wallet },
-              { text: "One-click data export", icon: ArrowRight },
-              { text: "Offline mode with sync", icon: Globe },
-              { text: "Bank-level security", icon: Shield },
-              { text: "Multi-currency support", icon: Globe },
-              { text: "Recurring detection", icon: TrendingUp },
-              { text: "Financial reports", icon: BarChart3 },
-              { text: "Mobile-first design", icon: Sparkles },
-            ].map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <div
-                  key={feature.text}
-                  className="group flex cursor-default items-center gap-3 rounded-xl border border-border/50 bg-card p-4 transition-all duration-300 hover:border-primary/30 hover:bg-primary/5"
-                >
-                  <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/20">
-                    <Icon className="h-4 w-4 text-primary" />
-                  </div>
-                  <p className="font-medium text-foreground text-sm sm:text-base">
-                    {feature.text}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="bg-muted/30 px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-16 text-center">
-            <span className="mb-4 inline-block rounded-full bg-primary/10 px-3 py-1 font-medium text-primary text-sm">
-              Testimonials
-            </span>
-            <h2 className="mb-6 font-bold text-4xl sm:text-5xl">
-              Loved by <span className="gradient-text">Thousands</span>
-            </h2>
-            <p className="text-lg text-muted-foreground sm:text-xl">
-              Join the community that's taken control of their finances
-            </p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              {
-                quote:
-                  "Finally, a tool that gets variable income. No more end-of-month panic.",
-                author: "Sarah Chen",
-                role: "Freelance Designer",
-                avatar: "👩‍🎨",
-              },
-              {
-                quote:
-                  "I can see exactly where every dollar goes. It's completely changed my relationship with money.",
-                author: "Marcus Johnson",
-                role: "Content Creator",
-                avatar: "👨‍💻",
-              },
-              {
-                quote:
-                  "The simplicity is unreal. I actually stick with it and use it every single day.",
-                author: "Elena Rodriguez",
-                role: "Business Consultant",
-                avatar: "👩‍💼",
-              },
-            ].map((testimonial) => (
-              <div
-                key={testimonial.author}
-                className="group rounded-2xl border border-border/50 bg-card p-8 transition-all duration-500 hover:border-primary/30 hover:shadow-primary/5 hover:shadow-xl"
-              >
-                {/* Star rating */}
-                <div className="mb-6 flex gap-1">
-                  {Array.from(
-                    { length: 5 },
-                    (_, starIndex) => starIndex + 1,
-                  ).map((star) => (
-                    <span key={star} className="text-lg text-yellow-500">
-                      ★
-                    </span>
-                  ))}
-                </div>
-
-                <blockquote className="mb-8 text-foreground text-lg leading-relaxed">
-                  "{testimonial.quote}"
-                </blockquote>
-
-                <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-accent/20 text-2xl">
-                    {testimonial.avatar}
+                <div className="mb-4 flex items-center gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/80 to-accent/50 font-bold text-foreground">
+                    {t.avatar}
                   </div>
                   <div>
-                    <p className="font-semibold text-foreground">
-                      {testimonial.author}
-                    </p>
-                    <p className="text-muted-foreground text-sm">
-                      {testimonial.role}
-                    </p>
+                    <h4 className="font-semibold">{t.author}</h4>
+                    <p className="text-muted-foreground text-xs">{t.role}</p>
                   </div>
                 </div>
+                <p className="text-foreground/80 text-sm leading-relaxed">
+                  "{t.text}"
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
-        <div className="mx-auto max-w-3xl">
-          <div className="mb-16 text-center">
-            <span className="mb-4 inline-block rounded-full bg-primary/10 px-3 py-1 font-medium text-primary text-sm">
-              FAQ
-            </span>
-            <h2 className="font-bold text-4xl sm:text-5xl">
-              Got <span className="gradient-text">Questions?</span>
-            </h2>
-          </div>
-
-          <div className="space-y-4">
-            {[
-              {
-                q: "Is my financial data secure?",
-                a: "Absolutely. We use bank-level 256-bit encryption. Your data is never shared or sold. You maintain complete ownership and control.",
-              },
-              {
-                q: "Can I import transactions from my bank?",
-                a: "Bank import is on our roadmap! For now, our optimized interface makes logging take just seconds—many users prefer it.",
-              },
-              {
-                q: "What if I have multiple income sources?",
-                a: "Transact was built exactly for this. Tag income sources, track multiple streams, and see your complete financial picture in one place.",
-              },
-              {
-                q: "Is there a free version?",
-                a: "Yes! Start free with unlimited transactions. Premium unlocks advanced analytics, insights, and priority support.",
-              },
-              {
-                q: "Does it work offline?",
-                a: "No. Transact doesn't work as it is a web application that requires an internet connection to function properly.",
-              },
-            ].map((item) => (
-              <details
-                key={item.q}
-                className="group overflow-hidden rounded-xl border border-border/50 bg-card transition-colors hover:border-primary/30"
-              >
-                <summary className="flex cursor-pointer list-none items-center justify-between p-6 font-semibold text-foreground text-lg">
-                  <span className="pr-4">{item.q}</span>
-                  <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-muted transition-transform group-open:rotate-180">
-                    <svg
-                      className="h-4 w-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </span>
-                </summary>
-                <div className="px-6 pb-6">
-                  <p className="text-muted-foreground leading-relaxed">
-                    {item.a}
-                  </p>
-                </div>
-              </details>
-            ))}
-          </div>
+      {/* --- FAQ --- */}
+      <section className="mx-auto max-w-3xl px-4 py-24">
+        <h2 className="mb-10 text-center font-bold text-3xl">
+          Frequently Asked
+        </h2>
+        <div className="space-y-4">
+          {[
+            {
+              q: "Is it really free?",
+              a: "Yes. Basic tracking is free forever. We only charge for advanced automation and team features.",
+            },
+            {
+              q: "Is my data safe?",
+              a: "Your data is encrypted locally on your device before it ever touches our servers. We cannot see your transactions.",
+            },
+            {
+              q: "Does it connect to banks?",
+              a: "Currently no. We focus on manual speed and privacy. Bank connections are coming in v2.0 as an optional plugin.",
+            },
+          ].map((faq, i) => (
+            <details
+              key={`faq-${i + 1}`}
+              className="group glass-card rounded-xl"
+            >
+              <summary className="flex cursor-pointer items-center justify-between p-6 font-medium">
+                {faq.q}
+                <span className="transition-transform group-open:rotate-180">
+                  <ArrowRight className="h-4 w-4 rotate-90" />
+                </span>
+              </summary>
+              <div className="px-6 pb-6 text-muted-foreground">
+                <p>{faq.a}</p>
+              </div>
+            </details>
+          ))}
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="relative overflow-hidden px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
-        {/* Background gradient */}
-        <div className="-z-10 absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/5"></div>
-        <div className="-translate-x-1/2 -z-10 absolute top-0 left-1/2 h-[400px] w-[800px] rounded-full bg-primary/10 blur-[120px]"></div>
-
-        <div className="relative mx-auto max-w-3xl text-center">
-          <span className="mb-6 inline-block rounded-full bg-primary/10 px-3 py-1 font-medium text-primary text-sm">
-            Ready to start?
-          </span>
-          <h2 className="mb-6 text-balance font-bold text-4xl sm:text-5xl lg:text-6xl">
-            Take Control of Your
-            <span className="gradient-text"> Finances Today</span>
+      {/* --- FINAL CTA --- */}
+      <section className="relative overflow-hidden px-4 py-32 text-center">
+        <div className="relative z-10 mx-auto max-w-4xl">
+          <h2 className="mb-8 font-bold text-5xl tracking-tighter md:text-7xl">
+            Ready to <span className="text-gradient-primary">Ascend?</span>
           </h2>
-          <p className="mx-auto mb-10 max-w-2xl text-balance text-lg text-muted-foreground sm:text-xl">
-            Join 50,000+ freelancers and creators who've stopped guessing and
-            started knowing exactly where their money goes.
+          <p className="mx-auto mb-10 max-w-2xl text-muted-foreground text-xl">
+            Join the new standard of personal finance. Fast, private, and
+            unequivocally beautiful.
           </p>
-          <Login />
+          <div className="flex flex-col items-center gap-6">
+            <Link
+              href="/dashboard"
+              className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-primary px-8 font-medium text-primary-foreground shadow-lg transition-all duration-300 hover:scale-105 hover:bg-primary/90"
+            >
+              <span className="mr-2">Get Started</span>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <p className="text-muted-foreground text-xs">
+              No credit card required • Encrypted & Secure
+            </p>
+          </div>
+        </div>
 
-          <p className="mt-6 flex items-center justify-center gap-2 text-muted-foreground text-sm">
-            <Shield className="h-4 w-4" />
-            No credit card required • Free forever plan
-          </p>
+        {/* Background Effects */}
+        <div className="absolute inset-0 z-0">
+          <div className="-translate-x-1/2 pointer-events-none absolute bottom-0 left-1/2 h-[500px] w-full bg-gradient-to-t from-primary/20 via-primary/5 to-transparent blur-3xl" />
+          <div className="absolute bottom-0 h-px w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
         </div>
       </section>
 
-      {/* Footer */}
       <Footer />
     </div>
   );
