@@ -2,6 +2,7 @@
 
 import { Edit2, Loader, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import {
   createCategory,
   deleteCategory,
@@ -23,6 +24,7 @@ export default function CategoriesPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [categoryName, setCategoryName] = useState("");
+  const [isResetting, setIsResetting] = useState(false);
 
   useEffect(() => {
     loadCategories();
@@ -39,7 +41,7 @@ export default function CategoriesPage() {
 
   const handleCreateOrUpdate = async () => {
     if (!categoryName.trim()) {
-      alert("Please enter a category name");
+      toast.warning("Please enter a category name");
       return;
     }
 
@@ -47,14 +49,14 @@ export default function CategoriesPage() {
       if (editingId) {
         const result = await updateCategory(editingId, categoryName);
         if (result.success) {
-          alert("Category updated successfully");
+          toast.success("Category updated successfully");
         }
       } else {
         const result = await createCategory(categoryName);
         if (result.success) {
-          alert("Category created successfully");
+          toast.success("Category created successfully");
         } else {
-          alert(result.message || "Failed to create category");
+          toast.error(result.message || "Failed to create category");
         }
       }
       setCategoryName("");
@@ -63,7 +65,7 @@ export default function CategoriesPage() {
       await loadCategories();
     } catch (error) {
       console.error("Error:", error);
-      alert("An error occurred");
+      toast.error("An error occurred");
     }
   };
 
@@ -85,14 +87,14 @@ export default function CategoriesPage() {
     try {
       const result = await deleteCategory(id);
       if (result.success) {
-        alert("Category deleted successfully");
+        toast.success("Category deleted successfully");
         await loadCategories();
       } else {
-        alert(result.message || "Failed to delete category");
+        toast.error(result.message || "Failed to delete category");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("An error occurred");
+      toast.error("An error occurred");
     }
   };
 
@@ -110,6 +112,36 @@ export default function CategoriesPage() {
     }).format(amount);
   };
 
+  const handleResetCategories = async () => {
+    if (
+      !window.confirm(
+        "Are you sure you want to reset all categories to defaults? This will remove all custom categories.",
+      )
+    ) {
+      return;
+    }
+
+    setIsResetting(true);
+    try {
+      const response = await fetch("/api/user/reset-categories", {
+        method: "POST",
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success("Categories reset successfully");
+        loadCategories();
+      } else {
+        toast.error(data.message || "Failed to reset categories");
+      }
+    } catch (error) {
+      console.error("Error resetting categories:", error);
+      toast.error("Failed to reset categories");
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -122,21 +154,39 @@ export default function CategoriesPage() {
             Organize your transactions by category
           </p>
         </div>
-        <button
-          onClick={() => setIsCreateModalOpen(true)}
-          className={cn(
-            "flex items-center gap-2",
-            "rounded-lg px-4 py-2",
-            "bg-zinc-900 dark:bg-zinc-50",
-            "text-zinc-50 dark:text-zinc-900",
-            "font-medium text-sm",
-            "hover:bg-zinc-800 dark:hover:bg-zinc-200",
-            "transition-colors duration-200",
-          )}
-        >
-          <Plus className="h-4 w-4" />
-          Add Category
-        </button>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={handleResetCategories}
+            disabled={isResetting}
+            className={cn(
+              "flex items-center gap-2",
+              "rounded-lg px-4 py-2",
+              "bg-red-900 dark:bg-red-950",
+              "text-red-50 dark:text-red-100",
+              "font-medium text-sm",
+              "hover:bg-red-800 dark:hover:bg-red-900",
+              "transition-colors duration-200",
+              "disabled:cursor-not-allowed disabled:opacity-50",
+            )}>
+            {isResetting ? "Resetting..." : "Reset to Defaults"}
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsCreateModalOpen(true)}
+            className={cn(
+              "flex items-center gap-2",
+              "rounded-lg px-4 py-2",
+              "bg-zinc-900 dark:bg-zinc-50",
+              "text-zinc-50 dark:text-zinc-900",
+              "font-medium text-sm",
+              "hover:bg-zinc-800 dark:hover:bg-zinc-200",
+              "transition-colors duration-200",
+            )}>
+            <Plus className="h-4 w-4" />
+            Add Category
+          </button>
+        </div>
       </div>
 
       {/* Categories Table */}
@@ -168,8 +218,7 @@ export default function CategoriesPage() {
                 {categories.map((category) => (
                   <tr
                     key={category.id}
-                    className="border-gray-200 border-b transition hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800/50"
-                  >
+                    className="border-gray-200 border-b transition hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800/50">
                     <td className="px-6 py-3">
                       <span className="font-medium text-gray-900 dark:text-white">
                         {category.name}
@@ -190,15 +239,13 @@ export default function CategoriesPage() {
                         <button
                           onClick={() => handleEdit(category)}
                           className="rounded-lg p-2 transition hover:bg-gray-100 dark:hover:bg-gray-800"
-                          title="Edit"
-                        >
+                          title="Edit">
                           <Edit2 className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                         </button>
                         <button
                           onClick={() => handleDelete(category.id)}
                           className="rounded-lg p-2 transition hover:bg-red-100 dark:hover:bg-red-900/30"
-                          title="Delete"
-                        >
+                          title="Delete">
                           <Trash2 className="h-4 w-4 text-red-600 dark:text-red-400" />
                         </button>
                       </div>
@@ -256,8 +303,7 @@ export default function CategoriesPage() {
                     "font-medium",
                     "hover:bg-gray-100 dark:hover:bg-gray-800",
                     "transition-colors duration-200",
-                  )}
-                >
+                  )}>
                   Cancel
                 </button>
                 <button
@@ -269,8 +315,7 @@ export default function CategoriesPage() {
                     "font-medium",
                     "hover:bg-zinc-800 dark:hover:bg-zinc-200",
                     "transition-colors duration-200",
-                  )}
-                >
+                  )}>
                   {editingId ? "Update" : "Create"}
                 </button>
               </div>

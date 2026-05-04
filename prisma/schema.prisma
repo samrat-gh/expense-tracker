@@ -40,6 +40,7 @@ model Session {
   @@map("sessions")
 }
 
+// Specificly written for Auth
 model Account {
   id                    String    @id @map("_id")
   accountId             String
@@ -74,11 +75,13 @@ model Verification {
   @@map("verifications")
 }
 
+// Written for account services on user dashboard
 model UserAccount {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String
   name      String
   type      String // savings, investment, etc.
+  isDefault Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

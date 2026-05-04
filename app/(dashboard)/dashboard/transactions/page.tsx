@@ -8,6 +8,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { getAccounts } from "@/lib/actions/account";
 import { getCategories } from "@/lib/actions/category";
 import {
@@ -68,7 +69,7 @@ export default function TransactionsPage() {
     ]);
 
     if (transRes.success && transRes.data?.transactions) {
-      setTransactions(transRes.data.transactions);
+      setTransactions(transRes.data.transactions as Transaction[]);
     }
     if (accRes.success && accRes.data) {
       setAccounts(accRes.data);
@@ -81,7 +82,7 @@ export default function TransactionsPage() {
 
   const handleCreateTransaction = async () => {
     if (!formData.accountId || !formData.categoryId || formData.amount <= 0) {
-      alert("Please fill in all required fields");
+      toast.warning("Please fill in all required fields");
       return;
     }
 
@@ -96,7 +97,7 @@ export default function TransactionsPage() {
       );
 
       if (result.success) {
-        alert("Transaction created successfully");
+        toast.success("Transaction created successfully");
         setFormData({
           accountId: "",
           categoryId: "",
@@ -108,11 +109,11 @@ export default function TransactionsPage() {
         setIsCreateModalOpen(false);
         await loadData();
       } else {
-        alert(result.message || "Failed to create transaction");
+        toast.error(result.message || "Failed to create transaction");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("An error occurred");
+      toast.error("An error occurred");
     }
   };
 
@@ -124,14 +125,14 @@ export default function TransactionsPage() {
     try {
       const result = await deleteTransaction(id);
       if (result.success) {
-        alert("Transaction deleted successfully");
+        toast.success("Transaction deleted successfully");
         await loadData();
       } else {
-        alert(result.message || "Failed to delete transaction");
+        toast.error(result.message || "Failed to delete transaction");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("An error occurred");
+      toast.error("An error occurred");
     }
   };
 
@@ -186,8 +187,7 @@ export default function TransactionsPage() {
             "font-medium text-sm",
             "hover:bg-zinc-800 dark:hover:bg-zinc-200",
             "transition-colors duration-200",
-          )}
-        >
+          )}>
           <Plus className="h-4 w-4" />
           Add Transaction
         </button>
@@ -231,8 +231,7 @@ export default function TransactionsPage() {
                 {transactions.map((transaction) => (
                   <tr
                     key={transaction.id}
-                    className="border-gray-200 border-b transition hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800/50"
-                  >
+                    className="border-gray-200 border-b transition hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800/50">
                     <td className="px-6 py-3">
                       <span className="text-gray-900 text-sm dark:text-white">
                         {formatDate(transaction.date)}
@@ -255,8 +254,7 @@ export default function TransactionsPage() {
                           transaction.type === "Credit"
                             ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
                             : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
-                        )}
-                      >
+                        )}>
                         {transaction.type === "Credit" ? (
                           <ArrowDownLeft className="h-3 w-3" />
                         ) : (
@@ -277,8 +275,7 @@ export default function TransactionsPage() {
                           transaction.type === "Credit"
                             ? "text-emerald-600 dark:text-emerald-400"
                             : "text-red-600 dark:text-red-400",
-                        )}
-                      >
+                        )}>
                         {transaction.type === "Credit" ? "+" : "-"}
                         {formatCurrency(transaction.amount)}
                       </span>
@@ -287,8 +284,7 @@ export default function TransactionsPage() {
                       <button
                         onClick={() => handleDelete(transaction.id)}
                         className="rounded-lg p-2 transition hover:bg-red-100 dark:hover:bg-red-900/30"
-                        title="Delete"
-                      >
+                        title="Delete">
                         <Trash2 className="h-4 w-4 text-red-600 dark:text-red-400" />
                       </button>
                     </td>
@@ -331,8 +327,7 @@ export default function TransactionsPage() {
                     "px-3 py-2",
                     "text-gray-900 dark:text-white",
                     "focus:outline-none focus:ring-2 focus:ring-blue-500",
-                  )}
-                >
+                  )}>
                   <option value="">Select an account</option>
                   {accounts.map((acc) => (
                     <option key={acc.id} value={acc.id}>
@@ -358,8 +353,7 @@ export default function TransactionsPage() {
                     "px-3 py-2",
                     "text-gray-900 dark:text-white",
                     "focus:outline-none focus:ring-2 focus:ring-blue-500",
-                  )}
-                >
+                  )}>
                   <option value="">Select a category</option>
                   {categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
@@ -415,8 +409,7 @@ export default function TransactionsPage() {
                     "px-3 py-2",
                     "text-gray-900 dark:text-white",
                     "focus:outline-none focus:ring-2 focus:ring-blue-500",
-                  )}
-                >
+                  )}>
                   <option value="Debit">Debit (Expense)</option>
                   <option value="Credit">Credit (Income)</option>
                 </select>
@@ -441,8 +434,7 @@ export default function TransactionsPage() {
                     "px-3 py-2",
                     "text-gray-900 dark:text-white",
                     "focus:outline-none focus:ring-2 focus:ring-blue-500",
-                  )}
-                >
+                  )}>
                   <option value="Cash">Cash</option>
                   <option value="Online">Online</option>
                 </select>
@@ -481,8 +473,7 @@ export default function TransactionsPage() {
                     "font-medium",
                     "hover:bg-gray-100 dark:hover:bg-gray-800",
                     "transition-colors duration-200",
-                  )}
-                >
+                  )}>
                   Cancel
                 </button>
                 <button
@@ -494,8 +485,7 @@ export default function TransactionsPage() {
                     "font-medium",
                     "hover:bg-zinc-800 dark:hover:bg-zinc-200",
                     "transition-colors duration-200",
-                  )}
-                >
+                  )}>
                   Create
                 </button>
               </div>

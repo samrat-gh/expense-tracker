@@ -14,7 +14,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Footer from "@/components/footer";
-import Login from "@/components/login";
+
 import Navbar from "@/components/nav";
 
 export default function Home() {
@@ -40,8 +40,7 @@ export default function Home() {
         <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-4 text-center sm:px-6 lg:px-8">
           {/* Badge */}
           <div
-            className={`transition-all delay-100 duration-700 ${mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
-          >
+            className={`transition-all delay-100 duration-700 ${mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
             <span className="group inline-flex cursor-pointer items-center gap-2 rounded-full border border-border/50 bg-accent/50 px-3 py-1 font-medium text-foreground/80 text-xs backdrop-blur-xl transition-colors hover:bg-accent">
               <Sparkles className="h-3.5 w-3.5 text-primary transition-colors group-hover:text-primary/80" />
               <span>Next-Gen Financial Intelligence</span>
@@ -50,43 +49,37 @@ export default function Home() {
 
           {/* Heading */}
           <h1
-            className={`mt-8 mb-6 max-w-4xl font-bold text-5xl text-foreground tracking-tight transition-all delay-200 duration-700 md:text-7xl ${mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
-          >
+            className={`mt-8 mb-6 max-w-4xl font-bold text-5xl text-foreground tracking-tight transition-all delay-200 duration-700 md:text-7xl ${mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
             Master Your Money <br />
             <span className="text-gradient-primary">With Precision</span>
           </h1>
 
           <p
-            className={`mb-10 max-w-2xl text-lg text-muted-foreground transition-all delay-300 duration-700 md:text-xl ${mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
-          >
+            className={`mb-10 max-w-2xl text-lg text-muted-foreground transition-all delay-300 duration-700 md:text-xl ${mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
             Stop guessing. Start knowing. The first expense tracker designed for
             the digital economy—real-time, offline-capable, private by default.
           </p>
 
           {/* CTA Buttons */}
           <div
-            className={`flex w-full flex-col gap-4 transition-all delay-400 duration-700 sm:w-auto sm:flex-row ${mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
-          >
+            className={`flex w-full flex-col gap-4 transition-all delay-400 duration-700 sm:w-auto sm:flex-row ${mounted ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}>
             <Link
               href="/dashboard"
-              className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-primary px-8 font-medium text-primary-foreground shadow-lg transition-all duration-300 hover:scale-105 hover:bg-primary/90"
-            >
+              className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-primary px-8 font-medium text-primary-foreground shadow-lg transition-all duration-300 hover:scale-105 hover:bg-primary/90">
               <span className="mr-2">Start Tracking Free</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
 
             <a
               href="#features"
-              className="inline-flex h-12 items-center justify-center rounded-full border border-border bg-accent/50 px-8 font-medium text-foreground backdrop-blur-sm transition-all hover:bg-accent"
-            >
+              className="inline-flex h-12 items-center justify-center rounded-full border border-border bg-accent/50 px-8 font-medium text-foreground backdrop-blur-sm transition-all hover:bg-accent">
               How it Works
             </a>
           </div>
 
           {/* Floating Dashboard Interface */}
           <div
-            className={`perspective-1000 relative mx-auto mt-20 w-full max-w-5xl transition-all delay-500 duration-1000 ${mounted ? "translate-y-0 rotate-x-12 opacity-100" : "translate-y-12 opacity-0"}`}
-          >
+            className={`perspective-1000 relative mx-auto mt-20 w-full max-w-5xl transition-all delay-500 duration-1000 ${mounted ? "translate-y-0 rotate-x-12 opacity-100" : "translate-y-12 opacity-0"}`}>
             <div className="group relative aspect-[16/10] animate-float-delayed overflow-hidden rounded-xl border border-border/50 bg-card/50 shadow-2xl ring-1 ring-border/20 backdrop-blur-md md:aspect-[21/9]">
               {/* Header */}
               <div className="flex h-10 items-center gap-2 border-border/50 border-b bg-accent/30 px-4">
@@ -149,8 +142,7 @@ export default function Home() {
                     {[1, 2].map((i) => (
                       <div
                         key={i}
-                        className="flex items-center justify-between"
-                      >
+                        className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div className="h-8 w-8 rounded-full bg-accent/70" />
                           <div className="h-4 w-32 rounded bg-accent/50" />
@@ -326,8 +318,7 @@ export default function Home() {
             ].map((t, i) => (
               <div
                 key={`feat-${i + 1}`}
-                className="glass-panel hover:-translate-y-2 relative rounded-2xl p-6 transition-transform duration-300"
-              >
+                className="glass-panel hover:-translate-y-2 relative rounded-2xl p-6 transition-transform duration-300">
                 <div className="mb-4 flex items-center gap-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/80 to-accent/50 font-bold text-foreground">
                     {t.avatar}
@@ -368,8 +359,7 @@ export default function Home() {
           ].map((faq, i) => (
             <details
               key={`faq-${i + 1}`}
-              className="group glass-card rounded-xl"
-            >
+              className="group glass-card rounded-xl">
               <summary className="flex cursor-pointer items-center justify-between p-6 font-medium">
                 {faq.q}
                 <span className="transition-transform group-open:rotate-180">
@@ -397,8 +387,7 @@ export default function Home() {
           <div className="flex flex-col items-center gap-6">
             <Link
               href="/dashboard"
-              className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-primary px-8 font-medium text-primary-foreground shadow-lg transition-all duration-300 hover:scale-105 hover:bg-primary/90"
-            >
+              className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-primary px-8 font-medium text-primary-foreground shadow-lg transition-all duration-300 hover:scale-105 hover:bg-primary/90">
               <span className="mr-2">Get Started</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>

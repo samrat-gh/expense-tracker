@@ -2,6 +2,7 @@
 
 import { Edit2, Loader, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import {
   createAccount,
   deleteAccount,
@@ -39,7 +40,7 @@ export default function AccountsPage() {
 
   const handleCreateOrUpdate = async () => {
     if (!formData.name || !formData.type) {
-      alert("Please fill in all fields");
+      toast.warning("Please fill in all fields");
       return;
     }
 
@@ -51,12 +52,12 @@ export default function AccountsPage() {
           formData.type,
         );
         if (result.success) {
-          alert("Account updated successfully");
+          toast.success("Account updated successfully");
         }
       } else {
         const result = await createAccount(formData.name, formData.type);
         if (result.success) {
-          alert("Account created successfully");
+          toast.success("Account created successfully");
         }
       }
       setFormData({ name: "", type: "savings" });
@@ -128,8 +129,7 @@ export default function AccountsPage() {
             "font-medium text-sm",
             "hover:bg-zinc-800 dark:hover:bg-zinc-200",
             "transition-colors duration-200",
-          )}
-        >
+          )}>
           <Plus className="h-4 w-4" />
           Add Account
         </button>
@@ -149,8 +149,7 @@ export default function AccountsPage() {
                 "rounded-xl border border-gray-200 bg-white p-6 dark:border-[#1F1F23] dark:bg-[#0F0F12]",
                 "hover:border-gray-300 dark:hover:border-[#2F2F37]",
                 "transition-all duration-200",
-              )}
-            >
+              )}>
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">
@@ -163,14 +162,12 @@ export default function AccountsPage() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleEdit(account)}
-                    className="rounded-lg p-2 transition hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
+                    className="rounded-lg p-2 transition hover:bg-gray-100 dark:hover:bg-gray-800">
                     <Edit2 className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                   </button>
                   <button
                     onClick={() => handleDelete(account.id)}
-                    className="rounded-lg p-2 transition hover:bg-red-100 dark:hover:bg-red-900/30"
-                  >
+                    className="rounded-lg p-2 transition hover:bg-red-100 dark:hover:bg-red-900/30">
                     <Trash2 className="h-4 w-4 text-red-600 dark:text-red-400" />
                   </button>
                 </div>
@@ -241,8 +238,7 @@ export default function AccountsPage() {
                     "px-3 py-2",
                     "text-gray-900 dark:text-white",
                     "focus:outline-none focus:ring-2 focus:ring-blue-500",
-                  )}
-                >
+                  )}>
                   <option value="savings">Savings</option>
                   <option value="investment">Investment</option>
                   <option value="checking">Checking</option>
@@ -260,8 +256,7 @@ export default function AccountsPage() {
                     "font-medium",
                     "hover:bg-gray-100 dark:hover:bg-gray-800",
                     "transition-colors duration-200",
-                  )}
-                >
+                  )}>
                   Cancel
                 </button>
                 <button
@@ -273,8 +268,7 @@ export default function AccountsPage() {
                     "font-medium",
                     "hover:bg-zinc-800 dark:hover:bg-zinc-200",
                     "transition-colors duration-200",
-                  )}
-                >
+                  )}>
                   {editingId ? "Update" : "Create"}
                 </button>
               </div>

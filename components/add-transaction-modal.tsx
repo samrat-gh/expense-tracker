@@ -66,11 +66,13 @@ export default function AddTransactionModal({
 
       if (accountsRes.ok) {
         const data = await accountsRes.json();
+        console.log("Fetched accounts:", data);
         setAccounts(data.data || []);
       }
 
       if (categoriesRes.ok) {
         const data = await categoriesRes.json();
+        console.log("Fetched categories:", data);
         setCategories(data.data || []);
       }
     } catch (error) {
@@ -187,8 +189,7 @@ export default function AddTransactionModal({
                   handleSelectChange("accountId", e.target.value)
                 }
                 className="w-full rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
-                required
-              >
+                required>
                 <option value="" disabled>
                   Select account
                 </option>
@@ -211,8 +212,7 @@ export default function AddTransactionModal({
                   handleSelectChange("categoryId", e.target.value)
                 }
                 className="w-full rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
-                required
-              >
+                required>
                 <option value="" disabled>
                   Select category
                 </option>
@@ -232,8 +232,7 @@ export default function AddTransactionModal({
                 name="type"
                 value={formData.type}
                 onChange={(e) => handleSelectChange("type", e.target.value)}
-                className="w-full rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
-              >
+                className="w-full rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring">
                 <option value="Credit">Credit (Income)</option>
                 <option value="Debit">Debit (Expense)</option>
               </select>
@@ -247,8 +246,7 @@ export default function AddTransactionModal({
                 name="method"
                 value={formData.method}
                 onChange={(e) => handleSelectChange("method", e.target.value)}
-                className="w-full rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
-              >
+                className="w-full rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring">
                 <option value="Online">Online</option>
                 <option value="Cash">Cash</option>
               </select>
@@ -275,15 +273,13 @@ export default function AddTransactionModal({
                 variant="outline"
                 onClick={() => onOpenChange(false)}
                 disabled={loading}
-                className="flex-1"
-              >
+                className="flex-1">
                 Cancel
               </Button>
               <Button
                 type="submit"
                 disabled={loading}
-                className="flex-1 cursor-pointer bg-purple-600 hover:bg-purple-700"
-              >
+                className="flex-1 cursor-pointer bg-purple-600 hover:bg-purple-700">
                 {loading ? "Adding..." : "Add Transaction"}
               </Button>
             </div>

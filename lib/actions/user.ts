@@ -3,6 +3,13 @@
 import { getSession } from "@/lib/auth-server";
 import { prisma } from "@/lib/prisma";
 
+const defaultCategories = [
+  { name: "Personal", type: "expense" },
+  { name: "Food", type: "expense" },
+  { name: "Clothing", type: "expense" },
+  { name: "Family Expenses", type: "expense" },
+];
+
 export async function setDefaultCredit(initialAmount: number) {
   try {
     const session = await getSession();
@@ -127,27 +134,15 @@ export async function initializeUserDefaults(userId: string) {
       };
     }
 
-    // Default categories
-    const defaultCategories = [
-      "Groceries",
-      "Utilities",
-      "Entertainment",
-      "Dining",
-      "Transportation",
-      "Salary",
-      "Investment",
-      "Other",
-    ];
-
     // Create categories only if they don't exist
     const categories = !existingCategories
       ? await Promise.all(
-          defaultCategories.map((name) =>
+          defaultCategories.map((cat) =>
             prisma.category.create({
               data: {
                 userId,
-                name,
-                type: "expense",
+                name: cat.name,
+                type: cat.type,
               },
             }),
           ),
@@ -162,6 +157,7 @@ export async function initializeUserDefaults(userId: string) {
             userId,
             name: "Savings",
             type: "savings",
+            isDefault: true,
           },
         });
 
@@ -170,11 +166,56 @@ export async function initializeUserDefaults(userId: string) {
       message: "Default categories and account initialized successfully",
       data: {
         categories: categories.map((c) => ({ id: c.id, name: c.name })),
-        account: { id: account.id, name: account.name },
+        account: { id: account.id, name: account.name, isDefault: true },
       },
     };
   } catch (err) {
     console.error("Error initializing user defaults:", err);
+    return {
+      success: false,
+      message: err instanceof Error ? err.message : "Something went wrong!",
+    };
+  }
+}
+
+export async function resetUserCategories() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      return {
+        success: false,
+        message: "Unauthorized",
+      };
+    }
+
+    const userId = session.user.id;
+
+    // Delete all existing categories (cascade delete will handle transactions)
+    await prisma.category.deleteMany({
+      where: { userId },
+    });
+
+    // Create new default categories
+    const categories = await Promise.all(
+      defaultCategories.map((cat) =>
+        prisma.category.create({
+          data: {
+            userId,
+            name: cat.name,
+            type: cat.type,
+          },
+        }),
+      ),
+    );
+
+    return {
+      success: true,
+      message: "Categories reset successfully",
+      data: categories.map((c) => ({ id: c.id, name: c.name })),
+    };
+  } catch (err) {
+    console.error("Error resetting categories:", err);
     return {
       success: false,
       message: err instanceof Error ? err.message : "Something went wrong!",

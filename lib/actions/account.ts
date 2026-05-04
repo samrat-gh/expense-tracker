@@ -25,20 +25,24 @@ export async function getAccounts() {
           },
         },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ isDefault: "desc" }, { createdAt: "desc" }],
     });
 
     // Calculate balance for each account
     const accountsWithBalance = accounts.map((account) => {
-      const balance = account.transactions.reduce((sum: number, tx: any) => {
-        return tx.type === "Credit" ? sum + tx.amount : sum - tx.amount;
-      }, 0);
+      const balance = account.transactions.reduce(
+        (sum: number, tx: { type: string; amount: number }) => {
+          return tx.type === "Credit" ? sum + tx.amount : sum - tx.amount;
+        },
+        0,
+      );
 
       return {
         id: account.id,
         name: account.name,
         type: account.type,
         balance,
+        isDefault: account.isDefault,
         createdAt: account.createdAt,
       };
     });
@@ -52,6 +56,68 @@ export async function getAccounts() {
     return {
       success: false,
       message: "Failed to fetch accounts",
+      data: null,
+    };
+  }
+}
+
+export async function getDefaultAccount() {
+  try {
+    const session = await getSession();
+
+    if (!session) {
+      return {
+        success: false,
+        message: "Unauthorized",
+        data: null,
+      };
+    }
+
+    const defaultAccount = await prisma.userAccount.findFirst({
+      where: {
+        userId: session.user.id,
+        isDefault: true,
+      },
+      include: {
+        transactions: {
+          select: {
+            amount: true,
+            type: true,
+          },
+        },
+      },
+    });
+
+    if (!defaultAccount) {
+      return {
+        success: false,
+        message: "No default account found",
+        data: null,
+      };
+    }
+
+    const balance = defaultAccount.transactions.reduce(
+      (sum: number, tx: { type: string; amount: number }) => {
+        return tx.type === "Credit" ? sum + tx.amount : sum - tx.amount;
+      },
+      0,
+    );
+
+    return {
+      success: true,
+      data: {
+        id: defaultAccount.id,
+        name: defaultAccount.name,
+        type: defaultAccount.type,
+        balance,
+        isDefault: defaultAccount.isDefault,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching default account:", error);
+    return {
+      success: false,
+      message: "Failed to fetch default account",
       data: null,
     };
   }
@@ -75,7 +141,7 @@ export async function createAccount(name: string, type: string) {
       };
     }
 
-    const account = await prisma.bankAccount.create({
+    const account = await prisma.userAccount.create({
       data: {
         userId: session.user.id,
         name,
@@ -112,7 +178,7 @@ export async function updateAccount(
       };
     }
 
-    const account = await prisma.bankAccount.findFirst({
+    const account = await prisma.userAccount.findFirst({
       where: {
         id: accountId,
         userId: session.user.id,
@@ -126,7 +192,7 @@ export async function updateAccount(
       };
     }
 
-    const updated = await prisma.bankAccount.update({
+    const updated = await prisma.userAccount.update({
       where: { id: accountId },
       data: { name, type },
     });
@@ -156,7 +222,7 @@ export async function deleteAccount(accountId: string) {
       };
     }
 
-    const account = await prisma.bankAccount.findFirst({
+    const account = await prisma.userAccount.findFirst({
       where: {
         id: accountId,
         userId: session.user.id,
@@ -170,7 +236,7 @@ export async function deleteAccount(accountId: string) {
       };
     }
 
-    await prisma.bankAccount.delete({
+    await prisma.userAccount.delete({
       where: { id: accountId },
     });
 
